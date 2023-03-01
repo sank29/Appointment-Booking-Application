@@ -21,17 +21,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(PostException.class)
-	public ResponseEntity<MyErrorDetails> postExceptionHandler(PostException postException, WebRequest webRequest){
-		
-		MyErrorDetails myErrorDetails = new MyErrorDetails();
-		
-		myErrorDetails.setDetails(webRequest.getDescription(false));
-		myErrorDetails.setErrorMsg(postException.getMessage());
-		myErrorDetails.setLocalDateTime(LocalDateTime.now());
-		
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);
-	}
+	
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<MyErrorDetails> handleAllException(Exception exception, WebRequest webRequest) {
