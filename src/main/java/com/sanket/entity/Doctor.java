@@ -39,7 +39,7 @@ public class Doctor {
 	
 	private String experience;
 	
-	private List<Reviews> patientReviews;
+//	private List<Reviews> patientReviews;
 	
 	
 	
