@@ -16,6 +16,8 @@ import com.sanket.service.AdminDoctorService;
 import com.sanket.service.LoginService;
 import com.sanket.service.PatientService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class AdminController {
 	
@@ -37,7 +39,7 @@ public class AdminController {
 			
 			CurrentPatientSession currentUserSession = patientService.getCurrentUserByUuid(key);
 			
-			if(!currentUserSession.getUserType().equals("admin")) {
+			if(!currentUserSession.getUserType().equals("admin")) { 
 				
 				throw new LoginException("Please login as admin");
 				

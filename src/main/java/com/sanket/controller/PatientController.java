@@ -30,7 +30,7 @@ public class PatientController {
 	}
 	
 	
-	@PutMapping("/updateCustomer")
+	@PutMapping("/updatePatient")
 	public ResponseEntity<Patient> updateCustomer(@RequestBody Patient patient, @RequestParam(required = false) String key) throws PatientException{
 		
 		Patient updateduser = userService.updatePatient(patient, key);
@@ -38,5 +38,33 @@ public class PatientController {
 		return new ResponseEntity<Patient>(updateduser,HttpStatus.OK);
 		
 	}
+	
+	
+	
+	
+	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,69 +1,41 @@
 package com.sanket.entity;
 
-import java.util.ArrayList;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-
-
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
 @Getter
 @Setter
-public class Patient {
+public class Appointment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer patientId;
+	Integer appointmentId;
 	
-	private String name;
-	
-	private String mobileNo;
-	
-	private String password;
-	
-	private String email;
-	
-	private String type;
+	@ManyToOne
+	Patient patient;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	List<Appointment> listOfAppointments = new ArrayList<>();
+	// Appointement default time will be 15 mins from appoaintment start time.
+	LocalDateTime appointmentDateAndTime;
+	
+	
+	@ManyToOne
+	Doctor doctor;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
