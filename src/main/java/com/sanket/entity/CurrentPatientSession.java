@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 
 
 @Entity
-public class CurrentUserSession {
+public class CurrentPatientSession {
 	
 	@Id
 	private Integer userId;
@@ -20,13 +20,13 @@ public class CurrentUserSession {
 	
 	private LocalDateTime localDateTime;
 	
-	public CurrentUserSession() {
+	public CurrentPatientSession() {
 		
 	}
 
 	
 
-	public CurrentUserSession(Integer userId, String uuid, LocalDateTime localDateTime) {
+	public CurrentPatientSession(Integer userId, String uuid, LocalDateTime localDateTime) {
 		super();
 		this.userId = userId;
 		this.uuid = uuid;
