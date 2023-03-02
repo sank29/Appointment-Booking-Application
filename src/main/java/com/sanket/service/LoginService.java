@@ -1,11 +1,12 @@
 package com.sanket.service;
 
 import com.sanket.entity.LoginDTO;
+import com.sanket.entity.LoginUUIDKey;
 import com.sanket.exception.LoginException;
 
 public interface LoginService {
 	
-public String logIntoAccount(LoginDTO loginDTO) throws LoginException;
+	public LoginUUIDKey logIntoAccount(LoginDTO loginDTO) throws LoginException;
 	
 	public String logoutFromAccount(String key) throws LoginException;
 	

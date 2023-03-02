@@ -2,7 +2,10 @@ package com.sanket.service;
 
 
 
+
+import com.sanket.entity.CurrentPatientSession;
 import com.sanket.entity.Patient;
+import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
 
 
@@ -13,5 +16,7 @@ public interface PatientService {
 	public Patient updatePatient(Patient patient, String key) throws PatientException;
 	
 	public Patient getPatientByUuid(String uuid) throws PatientException;
+	
+	public CurrentPatientSession getCurrentUserByUuid(String uuid) throws LoginException;
 	
 }

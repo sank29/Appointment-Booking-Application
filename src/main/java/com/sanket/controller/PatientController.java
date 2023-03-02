@@ -20,7 +20,7 @@ public class PatientController {
 	@Autowired
 	PatientService userService;
 	
-	@PostMapping("/registerCustomer")
+	@PostMapping("/registerPatient")
 	public ResponseEntity<Patient> saveCustomer(@RequestBody Patient patient) throws PatientException{
 		
 		Patient savedUser= userService.createPatient(patient);
