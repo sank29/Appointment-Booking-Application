@@ -1,12 +1,16 @@
 package com.sanket.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,8 +43,8 @@ public class Doctor {
 	
 	private String experience;
 	
-//	private List<Reviews> patientReviews;
-	
+	@OneToMany(cascade = CascadeType.ALL)
+	List<Appointment> listOFAppointments = new ArrayList<>();
 	
 	
 }
