@@ -9,13 +9,13 @@ import org.springframework.web.context.request.WebRequest;
 
 public class GlobalExceptionHandler {
 	
-	@ExceptionHandler(UserException.class)
-	public ResponseEntity<MyErrorDetails> userExceptiionHandler(UserException userException, WebRequest webRequest){
+	@ExceptionHandler(PatientException.class)
+	public ResponseEntity<MyErrorDetails> userExceptiionHandler(PatientException patientException, WebRequest webRequest){
 		
 		MyErrorDetails myErrorDetails = new MyErrorDetails();
 		
 		myErrorDetails.setDetails(webRequest.getDescription(false));
-		myErrorDetails.setErrorMsg(userException.getMessage());
+		myErrorDetails.setErrorMsg(patientException.getMessage());
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
 		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);

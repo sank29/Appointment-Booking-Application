@@ -13,7 +13,7 @@ import jakarta.persistence.OneToMany;
 
 
 @Entity
-public class User {
+public class Patient {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,10 +27,10 @@ public class User {
 	
 	
 	
-	public User() {
+	public Patient() {
 		super();
 	}
-	public User(Integer userId, String name, String mobileNo, String password, String email) {
+	public Patient(Integer userId, String name, String mobileNo, String password, String email) {
 		super();
 		this.userId = userId;
 		this.name = name;

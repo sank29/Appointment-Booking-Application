@@ -7,18 +7,18 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sanket.entity.CurrentUserSession;
+import com.sanket.entity.CurrentPatientSession;
 import com.sanket.entity.LoginDTO;
-import com.sanket.entity.User;
+import com.sanket.entity.Patient;
 import com.sanket.exception.LoginException;
 import com.sanket.repository.SessionDao;
-import com.sanket.repository.UserDao;
+import com.sanket.repository.PatientDao;
 
 @Service
 public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
-	UserDao userdao;
+	PatientDao userdao;
 	
 	@Autowired
 	SessionDao sessionDao;
@@ -26,33 +26,33 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public String logIntoAccount(LoginDTO loginDTO) throws LoginException {
 		
-		User existingUser = userdao.findByMobileNo(loginDTO.getMobileNo());
+		Patient existingPatient = userdao.findByMobileNo(loginDTO.getMobileNo()); 
 		
-		if(existingUser == null) {
+		if(existingPatient == null) {
 			throw new LoginException("Please enter valid mobile number " + loginDTO.getMobileNo());
 		}
 		
 		
-		Optional<CurrentUserSession> validCustomerSessionOpt = sessionDao.findById(existingUser.getUserId());
+		Optional<CurrentPatientSession> validPatientSessionOpt = sessionDao.findById(existingPatient.getUserId());
 		
-		if(validCustomerSessionOpt.isPresent()) {
+		if(validPatientSessionOpt.isPresent()) {
 			
 			throw new LoginException("User already login");
 			
 		}
 		
-		if(existingUser.getPassword().equals(loginDTO.getPassword())) {
+		if(existingPatient.getPassword().equals(loginDTO.getPassword())) {
 			
 			String key = generateRandomString();
 			
-			CurrentUserSession currentUserSession = new CurrentUserSession(existingUser.getUserId(), key, LocalDateTime.now());
+			CurrentPatientSession currentPatientSession = new CurrentPatientSession(existingPatient.getUserId(), key, LocalDateTime.now());
 			
 			
-			userdao.save(existingUser);
+			userdao.save(existingPatient);
 			
-			sessionDao.save(currentUserSession);
+			sessionDao.save(currentPatientSession); 
 			
-			return "Login Successful as customer with this key "+ key;
+			return "Login Successful as Patient with this key "+ key;
 		
 		}else {
 			
@@ -64,11 +64,11 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public String logoutFromAccount(String key) throws LoginException {
 		
-		CurrentUserSession currentSessionOptional = sessionDao.findByUuid(key);
+		CurrentPatientSession currentPatientOptional = sessionDao.findByUuid(key);
 		
-		if(currentSessionOptional != null) {
+		if(currentPatientOptional != null) {
 			
-			sessionDao.delete(currentSessionOptional);
+			sessionDao.delete(currentPatientOptional); 
 			
 			return "Logout successful";
 			
@@ -82,9 +82,9 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public Boolean checkUserLoginOrNot(String key) throws LoginException {
 		
-		CurrentUserSession currentUserSession = sessionDao.findByUuid(key);
+		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
 		
-		if(currentUserSession != null) {
+		if(currentPatientSession != null) {
 			
 			return true;
 			
