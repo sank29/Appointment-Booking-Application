@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+@ControllerAdvice
 public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(PatientException.class)
@@ -16,6 +18,18 @@ public class GlobalExceptionHandler {
 		
 		myErrorDetails.setDetails(webRequest.getDescription(false));
 		myErrorDetails.setErrorMsg(patientException.getMessage());
+		myErrorDetails.setLocalDateTime(LocalDateTime.now());
+		
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(LoginException.class)
+	public ResponseEntity<MyErrorDetails> userExceptiionHandler(LoginException loginException, WebRequest webRequest){
+		
+		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		
+		myErrorDetails.setDetails(webRequest.getDescription(false));
+		myErrorDetails.setErrorMsg(loginException.getMessage());
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
 		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);

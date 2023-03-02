@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sanket.entity.CurrentPatientSession;
 import com.sanket.entity.Patient;
+import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
 import com.sanket.repository.SessionDao;
 import com.sanket.repository.PatientDao;
@@ -50,7 +51,7 @@ public class PatientServiceImpl implements PatientService {
 			throw new PatientException("Please provide the valid key to update the user");
 		}
 		
-		if(user.getUserId() == loggedInUser.getUserId()) {
+		if(user.getPatientId() == loggedInUser.getUserId()) {
 			
 			return userDao.save(user);
 	
@@ -73,6 +74,21 @@ public class PatientServiceImpl implements PatientService {
 		}else {
 			
 			throw new PatientException("Customer not present by this uuid " + uuid);
+		}
+	}
+
+	@Override
+	public CurrentPatientSession getCurrentUserByUuid(String uuid) throws LoginException {
+		
+		CurrentPatientSession currentUserSession = sessionDao.findByUuid(uuid);
+		
+		if(currentUserSession != null) {
+			
+			return currentUserSession;
+			
+		}else {
+			
+			throw new LoginException("Please enter valid key");
 		}
 	}
 

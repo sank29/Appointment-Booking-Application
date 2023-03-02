@@ -31,12 +31,12 @@ public class LoginController {
 	
 	@PostMapping("/login")
 	@CrossOrigin
-	public ResponseEntity<String> loginCustomer(@RequestBody LoginDTO loginDTO) throws LoginException{
+	public ResponseEntity<LoginUUIDKey> loginCustomer(@RequestBody LoginDTO loginDTO) throws LoginException{
 		
-		String result = customerLogin.logIntoAccount(loginDTO);
+		LoginUUIDKey result = customerLogin.logIntoAccount(loginDTO);
 		
 		
-		return new ResponseEntity<String>(result,HttpStatus.OK);
+		return new ResponseEntity<LoginUUIDKey>(result,HttpStatus.OK);
 		
 	}
 	

@@ -9,33 +9,38 @@ import org.springframework.stereotype.Service;
 
 import com.sanket.entity.CurrentPatientSession;
 import com.sanket.entity.LoginDTO;
+import com.sanket.entity.LoginUUIDKey;
 import com.sanket.entity.Patient;
 import com.sanket.exception.LoginException;
 import com.sanket.repository.SessionDao;
+
+
 import com.sanket.repository.PatientDao;
 
 @Service
 public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
-	PatientDao userdao;
+	PatientDao patientDao;
 	
 	@Autowired
 	SessionDao sessionDao;
 
 	@Override
-	public String logIntoAccount(LoginDTO loginDTO) throws LoginException {
+	public LoginUUIDKey logIntoAccount(LoginDTO loginDTO) throws LoginException {
 		
-		Patient existingPatient = userdao.findByMobileNo(loginDTO.getMobileNo()); 
+		LoginUUIDKey loginUUIDKey = new LoginUUIDKey();
+		
+		Patient existingPatient = patientDao.findByMobileNo(loginDTO.getMobileNo());
 		
 		if(existingPatient == null) {
 			throw new LoginException("Please enter valid mobile number " + loginDTO.getMobileNo());
 		}
 		
 		
-		Optional<CurrentPatientSession> validPatientSessionOpt = sessionDao.findById(existingPatient.getUserId());
+		Optional<CurrentPatientSession> validCustomerSessionOpt = sessionDao.findById(existingPatient.getPatientId());
 		
-		if(validPatientSessionOpt.isPresent()) {
+		if(validCustomerSessionOpt.isPresent()) {
 			
 			throw new LoginException("User already login");
 			
@@ -45,14 +50,43 @@ public class LoginServiceImpl implements LoginService {
 			
 			String key = generateRandomString();
 			
-			CurrentPatientSession currentPatientSession = new CurrentPatientSession(existingPatient.getUserId(), key, LocalDateTime.now());
+			CurrentPatientSession currentPatientSession = new CurrentPatientSession(existingPatient.getPatientId(), key, LocalDateTime.now());
 			
+			if(existingPatient.getPassword().equals("admin") && existingPatient.getMobileNo().equals("1234567890")) {
+				
+				existingPatient.setType("admin");
+				currentPatientSession.setUserType("admin");
+				currentPatientSession.setUserId(existingPatient.getPatientId());
+				
+				sessionDao.save(currentPatientSession);
+				patientDao.save(existingPatient);
+				
+				loginUUIDKey.setMsg("Login Successful as admin with key");
+				
+				loginUUIDKey.setUuid(key);
+				
+				return loginUUIDKey;
+				
+				
+			}else {
+				
+				existingPatient.setType("patient");
+				currentPatientSession.setUserId(existingPatient.getPatientId());
+				currentPatientSession.setUserType("patient");
+				
 			
-			userdao.save(existingPatient);
+				
+			}
 			
-			sessionDao.save(currentPatientSession); 
+			patientDao.save(existingPatient);
 			
-			return "Login Successful as Patient with this key "+ key;
+			sessionDao.save(currentPatientSession);
+			
+			loginUUIDKey.setMsg("Login Successful as patient with this key");
+			
+			loginUUIDKey.setUuid(key);
+			
+			return loginUUIDKey;
 		
 		}else {
 			
