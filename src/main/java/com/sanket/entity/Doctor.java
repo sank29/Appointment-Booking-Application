@@ -35,10 +35,6 @@ public class Doctor {
 	
 	private Boolean insuranceAcceptance;
 	
-	private LocalDate availabilityStart;
-	
-	private LocalDate availabilityEnd;
-	
 	private String education;
 	
 	private String experience;
@@ -48,30 +44,3 @@ public class Doctor {
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -44,6 +44,7 @@ public class Patient {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Appointment> listOfAppointments = new ArrayList<>();
+	
 
 }
 
