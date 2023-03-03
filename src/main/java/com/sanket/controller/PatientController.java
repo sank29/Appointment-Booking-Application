@@ -71,31 +71,11 @@ public class PatientController {
 		}else {
 			
 			throw new LoginException("Invalid key or please login first");
+			
 		}
 	}
 	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
