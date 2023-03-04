@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.sanket.entity.Appointment;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
+import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
@@ -28,7 +29,7 @@ import com.sanket.service.PatientService;
 public class PatientController {
 	
 	@Autowired
-	PatientService userService;
+	PatientService patientService; 
 	
 	@Autowired
 	LoginService loginService;
@@ -41,7 +42,7 @@ public class PatientController {
 	@PostMapping("/registerPatient")
 	public ResponseEntity<Patient> saveCustomer(@RequestBody Patient patient) throws PatientException{
 		
-		Patient savedUser= userService.createPatient(patient);
+		Patient savedUser= patientService.createPatient(patient);
 		
 		return new ResponseEntity<Patient>(savedUser, HttpStatus.CREATED);
 		
@@ -51,7 +52,7 @@ public class PatientController {
 	@PutMapping("/updatePatient")
 	public ResponseEntity<Patient> updateCustomer(@RequestBody Patient patient, @RequestParam(required = false) String key) throws PatientException{
 		
-		Patient updateduser = userService.updatePatient(patient, key);
+		Patient updateduser = patientService.updatePatient(patient, key);
 		
 		return new ResponseEntity<Patient>(updateduser,HttpStatus.OK);
 		
@@ -74,6 +75,26 @@ public class PatientController {
 			
 		}
 	}
+	
+	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			patientService.bookAppointment(key, appointment);
+			
+			
+			
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+		
+		return null;
+		
+	}
+	
+	
 	
 
 }
