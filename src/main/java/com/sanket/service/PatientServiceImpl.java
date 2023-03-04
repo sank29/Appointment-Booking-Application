@@ -5,11 +5,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentPatientSession;
 import com.sanket.entity.Patient;
+import com.sanket.exception.AppointmentException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
 import com.sanket.repository.SessionDao;
+import com.sanket.repository.AppointmentDao;
 import com.sanket.repository.PatientDao;
 
 @Service
@@ -20,6 +23,12 @@ public class PatientServiceImpl implements PatientService {
 	
 	@Autowired
 	SessionDao sessionDao;
+	
+	@Autowired
+	PatientDao patientDao;
+	
+	@Autowired
+	AppointmentDao appointmentDao;
 
 	@Override
 	public Patient createPatient(Patient patient) throws PatientException {
@@ -89,6 +98,26 @@ public class PatientServiceImpl implements PatientService {
 		}else {
 			
 			throw new LoginException("Please enter valid key");
+		}
+	}
+
+	@Override
+	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException {
+		
+		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
+		
+		if(patient.isPresent()) {
+			
+			appointment.setPatient(patient.get());
+			
+			return appointmentDao.save(appointment);
+			
+		}else {
+			
+			throw new LoginException("Please enter valid key"); 
+			
 		}
 	}
 

@@ -40,7 +40,7 @@ public class Doctor {
 	private String experience;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	List<Appointment> listOFAppointments = new ArrayList<>();
+	List<Appointment> listOfAppointments = new ArrayList<>();
 	
 	
 }
