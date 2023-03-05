@@ -1,5 +1,6 @@
 package com.sanket.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +8,15 @@ import org.springframework.stereotype.Service;
 
 import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentPatientSession;
+import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
 import com.sanket.exception.AppointmentException;
+import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
 import com.sanket.repository.SessionDao;
 import com.sanket.repository.AppointmentDao;
+import com.sanket.repository.DoctorDao;
 import com.sanket.repository.PatientDao;
 
 @Service
@@ -29,6 +33,9 @@ public class PatientServiceImpl implements PatientService {
 	
 	@Autowired
 	AppointmentDao appointmentDao;
+	
+	@Autowired
+	DoctorDao doctorDao;
 
 	@Override
 	public Patient createPatient(Patient patient) throws PatientException {
@@ -102,7 +109,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException {
+	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException, DoctorException {
 		
 		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
 		
@@ -112,7 +119,38 @@ public class PatientServiceImpl implements PatientService {
 			
 			appointment.setPatient(patient.get());
 			
-			return appointmentDao.save(appointment);
+			Doctor doctor = appointment.getDoctor();
+			
+			System.out.println("********" + doctor);
+					
+			Optional<Doctor> registerDoctors = doctorDao.findById(doctor.getDoctorId());
+			
+			if(!registerDoctors.isEmpty()) {
+				
+				// mapping appointment in doctor and then saving doctor
+				
+				appointment.setDoctor(registerDoctors.get());
+				
+				registerDoctors.get().getListOfAppointments().add(appointment);
+				
+				doctorDao.save(registerDoctors.get());
+				
+				// mapping appointment in patient then saving patient
+				
+				patient.get().getListOfAppointments().add(appointment);
+				
+				patientDao.save(patient.get());
+				
+				return appointmentDao.save(appointment);
+				
+				
+			}else {
+				 
+				throw new DoctorException("Please enter valid doctors details or doctor not present with thid id " + doctor.getDoctorId());
+				
+			}
+			
+			
 			
 		}else {
 			
@@ -122,6 +160,40 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
