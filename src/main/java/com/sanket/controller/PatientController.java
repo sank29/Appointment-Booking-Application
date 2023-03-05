@@ -76,11 +76,20 @@ public class PatientController {
 		}
 	}
 	
-	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException{
+	@PostMapping("/bookAppointment")
+	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException, DoctorException{
+		
+		System.out.println("***" + appointment);
+		
+		if(appointment == null) {
+			throw new AppointmentException("Please enter valid appointment");
+		}
 		
 		if(loginService.checkUserLoginOrNot(key)) {
 			
-			patientService.bookAppointment(key, appointment);
+			Appointment registerAppointment = patientService.bookAppointment(key, appointment);
+			
+			return new ResponseEntity<Appointment>(registerAppointment, HttpStatus.CREATED);
 			
 			
 			
@@ -89,8 +98,6 @@ public class PatientController {
 			throw new LoginException("Invalid key or please login first");
 			
 		}
-		
-		return null;
 		
 	}
 	

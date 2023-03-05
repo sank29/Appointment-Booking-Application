@@ -3,6 +3,7 @@ package com.sanket.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -22,7 +23,6 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Getter
 @Setter
 public class Patient {
@@ -43,6 +43,7 @@ public class Patient {
 	
 	
 	@OneToMany(cascade = CascadeType.ALL)
+	@JsonIgnore
 	List<Appointment> listOfAppointments = new ArrayList<>();
 	
 
