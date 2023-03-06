@@ -127,21 +127,29 @@ public class PatientServiceImpl implements PatientService {
 			
 			if(!registerDoctors.isEmpty()) {
 				
+				
+				
+				Appointment registerAppointment = appointmentDao.save(appointment);
+				
+				// we can't map appointment object directly because we don't have appointment id in it we have to mapped after saving the 
+				// appointment and then we will get the appointment id then it will not generate appointment again. If we mapped the register
+				// appointment.
+				
 				// mapping appointment in doctor and then saving doctor
 				
 				appointment.setDoctor(registerDoctors.get());
 				
-				registerDoctors.get().getListOfAppointments().add(appointment);
+				registerDoctors.get().getListOfAppointments().add(registerAppointment);
 				
 				doctorDao.save(registerDoctors.get());
 				
 				// mapping appointment in patient then saving patient
 				
-				patient.get().getListOfAppointments().add(appointment);
+				patient.get().getListOfAppointments().add(registerAppointment);
 				
 				patientDao.save(patient.get());
 				
-				return appointmentDao.save(appointment);
+				return registerAppointment;
 				
 				
 			}else {
