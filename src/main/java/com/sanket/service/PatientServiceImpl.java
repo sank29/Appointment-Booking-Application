@@ -167,6 +167,34 @@ public class PatientServiceImpl implements PatientService {
 		}
 	}
 
+	@Override
+	public List<Appointment> getAllAppointmenPatientWise(String key) throws AppointmentException, PatientException {
+		
+		
+		
+		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
+		
+		if(patient.get() != null) {
+			
+			List<Appointment> listOfAppointments = patient.get().getListOfAppointments();
+			
+			if(!listOfAppointments.isEmpty()) {
+				
+				return listOfAppointments;
+				
+			}else {
+				
+				throw new AppointmentException("No appointments found. Please book appointments");
+			}
+			
+		}else {
+			
+			throw new PatientException("Please enter valid patient details");
+		}
+	}
+
 }
 
 

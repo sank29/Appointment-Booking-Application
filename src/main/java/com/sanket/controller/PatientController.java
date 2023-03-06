@@ -101,6 +101,24 @@ public class PatientController {
 		
 	}
 	
+	@GetMapping("/allAppointment")
+	public ResponseEntity<List<Appointment>> getAllAppointmenPatientWise(@RequestParam String key) throws AppointmentException, PatientException, LoginException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			List<Appointment> listOfAppointments = patientService.getAllAppointmenPatientWise(key);
+			
+			return new ResponseEntity<List<Appointment>>(listOfAppointments, HttpStatus.ACCEPTED);
+			
+			
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+		
+	}
+	
 	
 	
 
