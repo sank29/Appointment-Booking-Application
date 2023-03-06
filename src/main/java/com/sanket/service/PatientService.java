@@ -3,6 +3,8 @@ package com.sanket.service;
 
 
 
+import java.util.List;
+
 import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentPatientSession;
 import com.sanket.entity.Patient;
@@ -23,5 +25,8 @@ public interface PatientService {
 	public CurrentPatientSession getCurrentUserByUuid(String uuid) throws LoginException;
 	
 	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException, DoctorException;
+	
+	
+	public List<Appointment> getAllAppointmenPatientWise(String key)throws AppointmentException, PatientException;
 	
 }
