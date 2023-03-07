@@ -1,7 +1,12 @@
 package com.sanket.service;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,6 +111,22 @@ public class PatientServiceImpl implements PatientService {
 			
 			throw new LoginException("Please enter valid key");
 		}
+	}
+	
+	// we are refreshing the appointment dates when client is fetching the appointment or client clicking on refresh button
+	public List<LocalDateTime> getAppointmentDates() throws IOException{
+		
+		FileReader reader = new FileReader("config.properties");  
+	      
+	    Properties p = new Properties();  
+	    
+	    p.load(reader); 
+	    
+	    
+	    
+	    return null;
+	    
+	    
 	}
 
 	@Override
