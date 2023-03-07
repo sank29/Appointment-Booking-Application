@@ -76,7 +76,7 @@ public class PatientController {
 		}
 	}
 	
-	@PostMapping("/bookAppointment")
+	@PostMapping("/bookAppointment") 
 	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException, DoctorException{
 		
 		System.out.println("***" + appointment);
