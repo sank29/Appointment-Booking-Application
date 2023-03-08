@@ -1,5 +1,6 @@
 package com.sanket.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
+import com.sanket.exception.TimeDateException;
 import com.sanket.service.DoctorService;
 import com.sanket.service.LoginService;
 import com.sanket.service.PatientService;
@@ -77,7 +79,7 @@ public class PatientController {
 	}
 	
 	@PostMapping("/bookAppointment") 
-	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException, DoctorException{
+	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException, DoctorException, IOException, TimeDateException{
 		
 		System.out.println("***" + appointment);
 		
