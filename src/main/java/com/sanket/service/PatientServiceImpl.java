@@ -128,6 +128,10 @@ public class PatientServiceImpl implements PatientService {
 	
 	public static void getAppointmentDates(Integer from, Integer to) throws IOException, TimeDateException{
 		
+		// empty the myTimeDate firstly before putting the new values
+		
+		myTimeDate.clear();
+		
 		// checking from and to is null or not
 		
 		if(from == null || to == null) {
@@ -229,8 +233,6 @@ public class PatientServiceImpl implements PatientService {
 			
 			// setting doctor in appointment
 			appointment.setDoctor(registerDoctors.get());
-			
-			System.out.println("********" + registerDoctors);
 			
 			if(!registerDoctors.isEmpty()) {
 				
@@ -347,6 +349,136 @@ public class PatientServiceImpl implements PatientService {
 			
 			throw new PatientException("Please enter valid patient details");
 		}
+	}
+	
+	@Override 
+	public Appointment updateAppointment(String key, Appointment newAppointment) throws AppointmentException, PatientException, DoctorException, IOException, TimeDateException {
+		
+		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
+		
+		if(patient.get() != null) {
+			
+			Optional<Appointment> registerAppoinment = appointmentDao.findById(newAppointment.getAppointmentId());
+			
+			Optional<Doctor> registerDoctor = doctorDao.findById(newAppointment.getDoctor().getDoctorId());
+			
+			if(!registerAppoinment.isEmpty()) {
+				
+				// check patient updated doctor or not
+				
+				Doctor newDoctor = newAppointment.getDoctor();
+				Doctor oldDoctor = registerAppoinment.get().getDoctor();
+				
+				if(!registerDoctor.isEmpty()) {
+					
+					// patient did not change the doctor now check patient may have change appointment time then check this doctor is 
+					// available at that time or not.
+					
+					LocalDateTime newTime = newAppointment.getAppointmentDateAndTime();
+					LocalDateTime oldTime = registerAppoinment.get().getAppointmentDateAndTime();
+					
+					if(!newTime.isEqual(oldTime)) {
+						
+						getAppointmentDates(registerDoctor.get().getAppointmentFromTime(),registerDoctor.get().getAppointmentToTime());
+						
+						List<Appointment> listOfAppointment = registerDoctor.get().getListOfAppointments();
+						
+						Boolean flag1 = false;
+						
+						Boolean flag2 = false;
+						
+						for(Appointment eachAppointment: listOfAppointment) {
+							
+							
+							
+							if(eachAppointment.getAppointmentDateAndTime().isEqual(newAppointment.getAppointmentDateAndTime())) {
+								
+								flag1 = true;
+								
+							}
+						}
+						
+						// check if give date and time if correct or not
+						
+						for(String str : myTimeDate.keySet()) {
+							
+							System.out.println(myTimeDate.get(str) +  " ** " + newAppointment.getAppointmentDateAndTime()); 
+							
+							if(myTimeDate.get(str).isEqual(newAppointment.getAppointmentDateAndTime())) {
+								
+								flag2 = true;
+								
+							}
+						}
+						
+						System.out.println("******" + myTimeDate);
+						
+						Appointment returnAppointment = null;
+						
+						
+						
+						if(!flag1 && flag2) {
+							
+							returnAppointment = appointmentDao.save(newAppointment);
+							
+							returnAppointment.setPatient(patient.get());
+							
+							returnAppointment.setDoctor(registerDoctor.get());
+							
+							// setting up the new appointment in patient
+							
+							patient.get().getListOfAppointments().remove(registerAppoinment.get());
+							
+							patient.get().getListOfAppointments().add(returnAppointment);
+							
+							patientDao.save(patient.get());
+							
+							// setting up the new appointment in doctor
+							
+							registerDoctor.get().getListOfAppointments().remove(registerAppoinment.get());
+							
+							registerDoctor.get().getListOfAppointments().add(returnAppointment);
+							
+							doctorDao.save(registerDoctor.get());
+							
+							return returnAppointment;
+							
+							
+						}else {
+							
+							throw new AppointmentException("This time or date already booked. Please enter valid appointment time and date " + newAppointment.getAppointmentDateAndTime());
+							
+						}
+						
+						
+					}else {
+						
+						throw new AppointmentException("Please update the appointment. You did not update anythings");
+					}
+					
+					
+					
+				}else {
+					
+					throw new DoctorException("No doctor found with this id " + newAppointment.getDoctor().getDoctorId());
+				}
+				
+				
+			}else {
+				
+				throw new AppointmentException("No appointments found. Please book appointments");
+			}
+			
+		}else {
+			
+			throw new PatientException("Please enter valid patient details");
+		}
+		
+		
+		
+		
 	}
 
 }

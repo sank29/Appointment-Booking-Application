@@ -31,4 +31,6 @@ public interface PatientService {
 	
 	public List<Appointment> getAllAppointmenPatientWise(String key)throws AppointmentException, PatientException;
 	
+	public Appointment updateAppointment(String key, Appointment newAppointment) throws AppointmentException, PatientException, DoctorException, IOException, TimeDateException;
+	
 }
