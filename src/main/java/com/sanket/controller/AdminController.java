@@ -13,7 +13,7 @@ import com.sanket.entity.Doctor;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.service.AdminDoctorService;
-import com.sanket.service.LoginService;
+import com.sanket.service.PatientAndAdminLoginService;
 import com.sanket.service.PatientService;
 
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public class AdminController {
 	AdminDoctorService adminDoctorService;
 	
 	@Autowired
-	LoginService loginService;
+	PatientAndAdminLoginService loginService;
 	
 	@Autowired
 	PatientService patientService;

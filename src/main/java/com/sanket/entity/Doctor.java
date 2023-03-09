@@ -36,6 +36,10 @@ public class Doctor {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer doctorId;
 	
+	private String mobileNo;
+	
+	private String password;
+	
 	private String name;
 	
 	private String specialty;
@@ -60,6 +64,10 @@ public class Doctor {
 	
 	
 	private Integer appointmentToTime;
+	
+	// for checking this is doctor or patient
+	
+	private String type;
 	
 }
 

@@ -18,7 +18,7 @@ import com.sanket.repository.SessionDao;
 import com.sanket.repository.PatientDao;
 
 @Service
-public class LoginServiceImpl implements LoginService {
+public class PatientAndAdminLoginServiceImpl implements PatientAndAdminLoginService {
 	
 	@Autowired
 	PatientDao patientDao;
@@ -114,9 +114,9 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public Boolean checkUserLoginOrNot(String key) throws LoginException {
+	public Boolean checkUserLoginOrNot(String key) throws LoginException { 
 		
-		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
+		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key);
 		
 		if(currentPatientSession != null) {
 			
@@ -126,8 +126,6 @@ public class LoginServiceImpl implements LoginService {
 			
 			return false;
 		}
-		
-		
 		
 	}
 	
