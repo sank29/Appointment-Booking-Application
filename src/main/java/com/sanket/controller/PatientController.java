@@ -23,7 +23,7 @@ import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
 import com.sanket.exception.TimeDateException;
 import com.sanket.service.DoctorService;
-import com.sanket.service.LoginService;
+import com.sanket.service.PatientAndAdminLoginService;
 import com.sanket.service.PatientService;
 
 
@@ -34,7 +34,7 @@ public class PatientController {
 	PatientService patientService; 
 	
 	@Autowired
-	LoginService loginService;
+	PatientAndAdminLoginService loginService;
 	
 	@Autowired
 	DoctorService doctorService;

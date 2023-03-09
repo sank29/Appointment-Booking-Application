@@ -15,7 +15,8 @@ import com.sanket.entity.LoginDTO;
 import com.sanket.entity.LoginResponse;
 import com.sanket.entity.LoginUUIDKey;
 import com.sanket.exception.LoginException;
-import com.sanket.service.LoginService;
+import com.sanket.service.DoctorLoginService;
+import com.sanket.service.PatientAndAdminLoginService;
 
 
 
@@ -23,17 +24,28 @@ import com.sanket.service.LoginService;
 public class LoginController {
 	
 	@Autowired
-	private LoginService customerLogin;
+	private PatientAndAdminLoginService patientAndAdminLoginService; 
 	
 	@Autowired
-	private LoginService loginService;
+	private DoctorLoginService doctorLoginService;
 	
 	
 	@PostMapping("/login")
 	@CrossOrigin
-	public ResponseEntity<LoginUUIDKey> loginCustomer(@RequestBody LoginDTO loginDTO) throws LoginException{
+	public ResponseEntity<LoginUUIDKey> loginPatient(@RequestBody LoginDTO loginDTO) throws LoginException{
 		
-		LoginUUIDKey result = customerLogin.logIntoAccount(loginDTO);
+		LoginUUIDKey result = patientAndAdminLoginService.logIntoAccount(loginDTO);
+		
+		
+		return new ResponseEntity<LoginUUIDKey>(result,HttpStatus.OK);
+		
+	}
+	
+	@PostMapping("/loginDoctor")
+	@CrossOrigin
+	public ResponseEntity<LoginUUIDKey> loginDoctor(@RequestBody LoginDTO loginDTO) throws LoginException{
+		
+		LoginUUIDKey result = doctorLoginService.logIntoAccount(loginDTO);
 		
 		
 		return new ResponseEntity<LoginUUIDKey>(result,HttpStatus.OK);
@@ -44,7 +56,7 @@ public class LoginController {
 	@GetMapping("/checkLogin/{uuid}")
 	public ResponseEntity<LoginResponse> checkUserLoginORNot(@PathVariable String uuid) throws LoginException{
 		
-		Boolean loginResult = loginService.checkUserLoginOrNot(uuid);
+		Boolean loginResult = patientAndAdminLoginService.checkUserLoginOrNot(uuid); 
 		
 		LoginResponse loginResponse = new LoginResponse(loginResult);
 		
@@ -53,11 +65,20 @@ public class LoginController {
 	}
 	
 	@PostMapping("/logout")
-	public String logoutCustomer(@RequestParam(required = false) String key) throws LoginException {
+	public String logoutPatient(@RequestParam(required = false) String key) throws LoginException {
 		
-		return customerLogin.logoutFromAccount(key);
+		return patientAndAdminLoginService.logoutFromAccount(key);
 		
 	}
+	
+	@PostMapping("/logoutDoctor")
+	public String logoutDoctor(@RequestParam(required = false) String key) throws LoginException {
+		
+		return doctorLoginService.logoutFromAccount(key);
+		
+	}
+	
+	
 	
 }
 

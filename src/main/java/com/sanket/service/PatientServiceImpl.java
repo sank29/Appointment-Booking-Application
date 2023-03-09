@@ -55,6 +55,9 @@ public class PatientServiceImpl implements PatientService {
 		Patient databaseUser = userDao.findByMobileNo(patient.getMobileNo()); 
 		
 		if(databaseUser == null) { 
+			// setting type patient because we have to check this is patient or doctor
+			
+			patient.setType("Patient");
 			
 			userDao.save(patient);
 			

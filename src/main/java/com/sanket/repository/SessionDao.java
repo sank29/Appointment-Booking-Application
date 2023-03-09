@@ -8,4 +8,5 @@ import com.sanket.entity.CurrentPatientSession;
 public interface SessionDao extends JpaRepository<CurrentPatientSession, Integer> {
 	
 	public CurrentPatientSession findByUuid(String uuid);
+	
 }
