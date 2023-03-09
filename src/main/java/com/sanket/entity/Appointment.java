@@ -4,6 +4,7 @@ package com.sanket.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,4 +46,50 @@ public class Appointment {
 	@ManyToOne
 	Doctor doctor;
 
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(appointmentId);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj)
+			
+			return true;
+		
+		if (obj == null)
+			
+			return false;
+		
+		if (getClass() != obj.getClass())
+			
+			return false;
+		
+		Appointment other = (Appointment) obj;
+		
+		return Objects.equals(appointmentId, other.appointmentId);
+
+	}
+	
+	
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

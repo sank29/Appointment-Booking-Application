@@ -121,9 +121,50 @@ public class PatientController {
 		
 	}
 	
+	@PostMapping("/updateAppointment")
+	public ResponseEntity<Appointment> updateAppointment(@RequestParam String key, @RequestBody Appointment newAppointment) throws LoginException, AppointmentException, PatientException, DoctorException, IOException, TimeDateException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			Appointment updatedAppointment = patientService.updateAppointment(key, newAppointment); 
+			
+			
+			return new ResponseEntity<Appointment>(updatedAppointment, HttpStatus.ACCEPTED);
+			
+			
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+		
+	}
 	
 	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
