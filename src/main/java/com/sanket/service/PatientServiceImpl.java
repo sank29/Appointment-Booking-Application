@@ -55,6 +55,7 @@ public class PatientServiceImpl implements PatientService {
 		Patient databaseUser = userDao.findByMobileNo(patient.getMobileNo()); 
 		
 		if(databaseUser == null) { 
+			
 			// setting type patient because we have to check this is patient or doctor
 			
 			patient.setType("Patient");
@@ -258,7 +259,7 @@ public class PatientServiceImpl implements PatientService {
 					}
 				}
 				
-				// check if give date and time if correct or not
+				// check if given date and time if correct or not
 				
 				for(String str : myTimeDate.keySet()) {
 					
@@ -400,7 +401,7 @@ public class PatientServiceImpl implements PatientService {
 							}
 						}
 						
-						// check if give date and time if correct or not
+						// check if given date and time if correct or not
 						
 						for(String str : myTimeDate.keySet()) {
 							
