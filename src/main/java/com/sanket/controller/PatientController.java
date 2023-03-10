@@ -1,6 +1,7 @@
 package com.sanket.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,31 +141,25 @@ public class PatientController {
 		
 	}
 	
+	@GetMapping("/availableTiming")
+	public ResponseEntity<List<LocalDateTime>> getAvailbleTimingOfDoctor(@RequestParam String key, @RequestBody Doctor doctor) throws IOException, TimeDateException, LoginException, DoctorException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			List<LocalDateTime> listOfAvailable = doctorService.getDoctorAvailableTimingForBooking(key, doctor);
+			
+			return new ResponseEntity<List<LocalDateTime>>(listOfAvailable, HttpStatus.ACCEPTED);
+			
+			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+	}
+	
 	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
