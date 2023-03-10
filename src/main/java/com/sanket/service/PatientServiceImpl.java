@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sanket.entity.Appointment;
-import com.sanket.entity.CurrentPatientSession;
+import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
 import com.sanket.exception.AppointmentException;
@@ -76,7 +76,7 @@ public class PatientServiceImpl implements PatientService {
 	public Patient updatePatient(Patient user, String key) throws PatientException {
 		
 
-		CurrentPatientSession loggedInUser = sessionDao.findByUuid(key);
+		CurrentSession loggedInUser = sessionDao.findByUuid(key);
 		
 		if(loggedInUser == null) {
 			
@@ -95,7 +95,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public Patient getPatientByUuid(String uuid) throws PatientException {
 		
-		CurrentPatientSession currentPatient = sessionDao.findByUuid(uuid);
+		CurrentSession currentPatient = sessionDao.findByUuid(uuid);
 		
 		Optional<Patient> patient = userDao.findById(currentPatient.getUserId());
 		
@@ -105,14 +105,14 @@ public class PatientServiceImpl implements PatientService {
 		
 		}else {
 			
-			throw new PatientException("Customer not present by this uuid " + uuid);
+			throw new PatientException("Patient not present by this uuid " + uuid);
 		}
 	}
 
 	@Override
-	public CurrentPatientSession getCurrentUserByUuid(String uuid) throws LoginException {
+	public CurrentSession getCurrentUserByUuid(String uuid) throws LoginException {
 		
-		CurrentPatientSession currentUserSession = sessionDao.findByUuid(uuid);
+		CurrentSession currentUserSession = sessionDao.findByUuid(uuid);
 		
 		if(currentUserSession != null) {
 			
@@ -217,7 +217,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException, DoctorException, IOException, TimeDateException {
 		
-		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
 		
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
 		
@@ -329,7 +329,7 @@ public class PatientServiceImpl implements PatientService {
 		
 		
 		
-		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
 		
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
 		
@@ -355,7 +355,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override 
 	public Appointment updateAppointment(String key, Appointment newAppointment) throws AppointmentException, PatientException, DoctorException, IOException, TimeDateException {
 		
-		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key); 
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
 		
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
 		
@@ -483,38 +483,6 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

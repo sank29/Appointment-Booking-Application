@@ -7,7 +7,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sanket.entity.CurrentPatientSession;
+import com.sanket.entity.CurrentSession;
 import com.sanket.entity.LoginDTO;
 import com.sanket.entity.LoginUUIDKey;
 import com.sanket.entity.Patient;
@@ -38,7 +38,7 @@ public class PatientAndAdminLoginServiceImpl implements PatientAndAdminLoginServ
 		}
 		
 		
-		Optional<CurrentPatientSession> validCustomerSessionOpt = sessionDao.findById(existingPatient.getPatientId());
+		Optional<CurrentSession> validCustomerSessionOpt = sessionDao.findById(existingPatient.getPatientId());
 		
 		if(validCustomerSessionOpt.isPresent()) {
 			
@@ -50,7 +50,7 @@ public class PatientAndAdminLoginServiceImpl implements PatientAndAdminLoginServ
 			
 			String key = generateRandomString();
 			
-			CurrentPatientSession currentPatientSession = new CurrentPatientSession(existingPatient.getPatientId(), key, LocalDateTime.now());
+			CurrentSession currentPatientSession = new CurrentSession(existingPatient.getPatientId(), key, LocalDateTime.now());
 			
 			if(existingPatient.getPassword().equals("admin") && existingPatient.getMobileNo().equals("1234567890")) {
 				
@@ -98,7 +98,7 @@ public class PatientAndAdminLoginServiceImpl implements PatientAndAdminLoginServ
 	@Override
 	public String logoutFromAccount(String key) throws LoginException {
 		
-		CurrentPatientSession currentPatientOptional = sessionDao.findByUuid(key);
+		CurrentSession currentPatientOptional = sessionDao.findByUuid(key);
 		
 		if(currentPatientOptional != null) {
 			
@@ -116,7 +116,7 @@ public class PatientAndAdminLoginServiceImpl implements PatientAndAdminLoginServ
 	@Override
 	public Boolean checkUserLoginOrNot(String key) throws LoginException { 
 		
-		CurrentPatientSession currentPatientSession = sessionDao.findByUuid(key);
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key);
 		
 		if(currentPatientSession != null) {
 			
