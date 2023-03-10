@@ -11,16 +11,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sanket.entity.Appointment;
+import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
+import com.sanket.entity.Patient;
 import com.sanket.exception.DoctorException;
+import com.sanket.exception.LoginException;
+import com.sanket.exception.PatientException;
 import com.sanket.exception.TimeDateException;
 import com.sanket.repository.DoctorDao;
+import com.sanket.repository.SessionDao;
 
 @Service
 public class DoctorServiceImpl implements DoctorService{
 	
 	@Autowired
 	DoctorDao doctorDao;
+	
+	@Autowired
+	SessionDao sessionDao;
 
 	@Override
 	public List<Doctor> getAllDoctorsRegisterFromDatabase() throws DoctorException {
@@ -98,6 +106,38 @@ public class DoctorServiceImpl implements DoctorService{
 		
 		
 		
+	}
+
+	@Override
+	public Doctor getDoctorByUuid(String uuid) throws PatientException {
+		
+		CurrentSession currentPatient = sessionDao.findByUuid(uuid);
+		
+		Optional<Doctor> patient = doctorDao.findById(currentPatient.getUserId());
+		
+		if(patient.isPresent()) {
+			
+			return patient.get();
+		
+		}else {
+			
+			throw new PatientException("Patient not present by this uuid " + uuid);
+		}
+	}
+	
+	@Override
+	public CurrentSession getCurrentUserByUuid(String uuid) throws LoginException {
+		
+		CurrentSession currentUserSession = sessionDao.findByUuid(uuid);
+		
+		if(currentUserSession != null) {
+			
+			return currentUserSession;
+			
+		}else {
+			
+			throw new LoginException("Please enter valid key");
+		}
 	}
 
 }

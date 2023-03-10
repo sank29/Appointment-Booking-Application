@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sanket.entity.CurrentPatientSession;
+import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
@@ -25,7 +25,7 @@ public class AdminController {
 	AdminDoctorService adminDoctorService;
 	
 	@Autowired
-	PatientAndAdminLoginService loginService;
+	PatientAndAdminLoginService patientAndAdminLoginService;
 	
 	@Autowired
 	PatientService patientService;
@@ -35,9 +35,9 @@ public class AdminController {
 		
 		
 		
-		if(loginService.checkUserLoginOrNot(key)) {
+		if(patientAndAdminLoginService.checkUserLoginOrNot(key)) {
 			
-			CurrentPatientSession currentUserSession = patientService.getCurrentUserByUuid(key);
+			CurrentSession currentUserSession = patientService.getCurrentUserByUuid(key);
 			
 			if(!currentUserSession.getUserType().equals("admin")) { 
 				

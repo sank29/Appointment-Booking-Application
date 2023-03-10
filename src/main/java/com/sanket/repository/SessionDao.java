@@ -2,11 +2,11 @@ package com.sanket.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sanket.entity.CurrentPatientSession;
+import com.sanket.entity.CurrentSession;
 
 
-public interface SessionDao extends JpaRepository<CurrentPatientSession, Integer> {
+public interface SessionDao extends JpaRepository<CurrentSession, Integer> {
 	
-	public CurrentPatientSession findByUuid(String uuid);
+	public CurrentSession findByUuid(String uuid);
 	
 }

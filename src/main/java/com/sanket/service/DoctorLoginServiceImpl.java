@@ -7,7 +7,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sanket.entity.CurrentPatientSession;
+import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.LoginDTO;
 import com.sanket.entity.LoginUUIDKey;
@@ -32,11 +32,13 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 		Doctor existingDoctor = doctorDao.findByMobileNo(loginDTO.getMobileNo());
 		
 		if(existingDoctor == null) {
+			
 			throw new LoginException("Please enter valid mobile number " + loginDTO.getMobileNo());
+			
 		}
 		
 		
-		Optional<CurrentPatientSession> validCustomerSessionOpt = sessionDao.findById(existingDoctor.getDoctorId());
+		Optional<CurrentSession> validCustomerSessionOpt = sessionDao.findById(existingDoctor.getDoctorId());
 		
 		if(validCustomerSessionOpt.isPresent()) {
 			
@@ -48,7 +50,7 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 			
 			String key = generateRandomString();
 			
-			CurrentPatientSession currentPatientSession = new CurrentPatientSession(existingDoctor.getDoctorId(), key, LocalDateTime.now()); 
+			CurrentSession currentPatientSession = new CurrentSession(existingDoctor.getDoctorId(), key, LocalDateTime.now()); 
 			
 			
 				
@@ -80,7 +82,7 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 		
 		
 		
-		CurrentPatientSession currentDoctorOptional = sessionDao.findByUuid(key);
+		CurrentSession currentDoctorOptional = sessionDao.findByUuid(key);
 		
 		if(currentDoctorOptional != null) {
 			
@@ -93,6 +95,22 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 			throw new LoginException("Please enter valid key");
 			
 		}
+	}
+	
+	@Override
+	public Boolean checkUserLoginOrNot(String key) throws LoginException { 
+		
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key);
+		
+		if(currentPatientSession != null) {
+			
+			return true;
+			
+		}else {
+			
+			return false;
+		}
+		
 	}
 	
 	public static String generateRandomString() {
