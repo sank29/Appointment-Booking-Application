@@ -6,9 +6,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
+import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
@@ -24,5 +26,7 @@ public interface DoctorService {
 	public CurrentSession getCurrentUserByUuid(String uuid) throws LoginException;
 	
 	public List<LocalDateTime> getDoctorAvailableTimingForBooking(String key, Doctor doctor) throws IOException, TimeDateException, DoctorException;
+	
+	public List<Appointment> getUpcommingDoctorAppointment(Doctor doctor) throws AppointmentException;
 	
 }

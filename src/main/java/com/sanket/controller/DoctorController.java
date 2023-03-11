@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
+import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
@@ -32,7 +33,7 @@ public class DoctorController {
 	
 	
 	@GetMapping("/upcomingAppointments")
-	public List<Appointment> getUpcomingAppointments(@RequestParam String key) throws LoginException, PatientException, DoctorException{ 
+	public ResponseEntity<List<Appointment>> getUpcomingAppointments(@RequestParam String key) throws LoginException, PatientException, DoctorException, AppointmentException{ 
 		
 		if(doctorLoginService.checkUserLoginOrNot(key)) {
 			
@@ -48,7 +49,9 @@ public class DoctorController {
 			
 			if(registerDoctor != null) {
 				
+				List<Appointment> listOfUpCommingAppointment = doctorService.getUpcommingDoctorAppointment(registerDoctor);
 				
+				return new ResponseEntity<List<Appointment>>(listOfUpCommingAppointment, HttpStatus.ACCEPTED);
 				
 				
 			}else {
@@ -60,6 +63,7 @@ public class DoctorController {
 		}else {
 			
 			throw new LoginException("Please enter valid key");
+			
 		}
 		
 	}
