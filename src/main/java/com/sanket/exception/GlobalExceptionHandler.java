@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
 		myErrorDetails.setErrorMsg(loginException.getMessage());
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
 	}
 	
 	

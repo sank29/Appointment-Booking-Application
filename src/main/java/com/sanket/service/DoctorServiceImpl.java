@@ -14,6 +14,7 @@ import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
+import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
@@ -137,6 +138,32 @@ public class DoctorServiceImpl implements DoctorService{
 		}else {
 			
 			throw new LoginException("Please enter valid key");
+		}
+	}
+
+	@Override
+	public List<Appointment> getUpcommingDoctorAppointment(Doctor doctor) throws AppointmentException {
+		
+		List<Appointment> listOfAppointments = doctor.getListOfAppointments();
+		
+		LocalDateTime currentTimeAndDate = LocalDateTime.now();
+		
+		
+		for(Appointment eachAppointment: listOfAppointments) {
+			
+			if(eachAppointment.getAppointmentDateAndTime().isAfter(currentTimeAndDate)) {
+				
+				listOfAppointments.add(eachAppointment);
+			}
+		}
+		
+		if(!listOfAppointments.isEmpty()) {
+			
+			return listOfAppointments;
+		
+		}else {
+			
+			throw new AppointmentException("No upcoming appointments. Sorry!");
 		}
 	}
 
