@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.print.Doc;
+
 import org.springframework.stereotype.Service;
 
 import com.sanket.entity.Appointment;
@@ -28,5 +30,7 @@ public interface DoctorService {
 	public List<LocalDateTime> getDoctorAvailableTimingForBooking(String key, Doctor doctor) throws IOException, TimeDateException, DoctorException;
 	
 	public List<Appointment> getUpcommingDoctorAppointment(Doctor doctor) throws AppointmentException;
+	
+	public List<Appointment> getPastDoctorAppointment(Doctor doctor) throws AppointmentException;
 	
 }
