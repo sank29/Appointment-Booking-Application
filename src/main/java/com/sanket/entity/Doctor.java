@@ -7,11 +7,13 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.TableGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +30,15 @@ import lombok.ToString;
 public class Doctor {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-//	@TableGenerator(initialValue = 100000,va) 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+	                generator = "id_table"
+			)
+	
+	@SequenceGenerator(
+			name = "id_table",
+			sequenceName = "id_sequence",
+			allocationSize = 1
+			)
 	private Integer doctorId;
 	
 	private String mobileNo;
