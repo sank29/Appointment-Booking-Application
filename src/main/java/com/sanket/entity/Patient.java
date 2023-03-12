@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -28,7 +29,22 @@ import lombok.Setter;
 public class Patient {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+	
+    generator = "id_table"
+    
+			)
+
+	@SequenceGenerator(
+			
+		name = "id_table",
+		sequenceName = "id_sequence",
+		allocationSize = 1
+		
+	)
+	
 	private Integer patientId;
 	
 	private String name;
