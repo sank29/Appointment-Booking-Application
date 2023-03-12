@@ -122,7 +122,7 @@ public class DoctorServiceImpl implements DoctorService{
 		
 		}else {
 			
-			throw new PatientException("Patient not present by this uuid " + uuid);
+			throw new PatientException("Doctor not present by this uuid " + uuid);
 		}
 	}
 	
@@ -146,56 +146,78 @@ public class DoctorServiceImpl implements DoctorService{
 		
 		List<Appointment> listOfAppointments = doctor.getListOfAppointments();
 		
+		List<Appointment> listOfCommingAppointmnet = new ArrayList<>();
+		
 		LocalDateTime currentTimeAndDate = LocalDateTime.now();
 		
 		
-		for(Appointment eachAppointment: listOfAppointments) {
+		try {
 			
-			if(eachAppointment.getAppointmentDateAndTime().isAfter(currentTimeAndDate)) {
+			for(Appointment eachAppointment: listOfAppointments) {
 				
-				listOfAppointments.add(eachAppointment);
+				if(eachAppointment.getAppointmentDateAndTime().isAfter(currentTimeAndDate)) {
+					
+					listOfCommingAppointmnet.add(eachAppointment);
+				}
 			}
+		}catch(Exception exception) {
+			
+			System.out.println(exception.fillInStackTrace());
+			
 		}
 		
-		if(!listOfAppointments.isEmpty()) {
+		if(!listOfCommingAppointmnet.isEmpty()) {
 			
-			return listOfAppointments;
+			return listOfCommingAppointmnet;
 		
 		}else {
 			
 			throw new AppointmentException("No upcoming appointments. Sorry!");
+			
+		}
+	}
+
+	@Override
+	public List<Appointment> getPastDoctorAppointment(Doctor doctor) throws AppointmentException {
+		
+		List<Appointment> listOfAppointments = doctor.getListOfAppointments();
+		
+		List<Appointment> listOfPastAppointments = new ArrayList<>();
+		
+		LocalDateTime currentTimeAndDate = LocalDateTime.now();
+		
+		
+		try {
+			
+			for(Appointment eachAppointment: listOfAppointments) {
+				
+				if(eachAppointment.getAppointmentDateAndTime().isBefore(currentTimeAndDate)) {
+					
+					listOfPastAppointments.add(eachAppointment);
+					
+				}
+				
+			}
+			
+		}catch(Exception exception) {
+			
+			
+			System.out.println(exception.fillInStackTrace());
+			
+		}
+		
+		if(!listOfPastAppointments.isEmpty()) {
+			
+			return listOfPastAppointments;
+		
+		}else {
+			
+			throw new AppointmentException("No past appointments. Sorry!");
+			
 		}
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
