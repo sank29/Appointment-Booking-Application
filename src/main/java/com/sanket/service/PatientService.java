@@ -15,6 +15,8 @@ import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
 import com.sanket.exception.TimeDateException;
 
+import jakarta.mail.MessagingException;
+
 
 public interface PatientService {
 	
@@ -26,7 +28,7 @@ public interface PatientService {
 	
 	public CurrentSession getCurrentUserByUuid(String uuid) throws LoginException;
 	
-	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException, DoctorException, IOException, TimeDateException;
+	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException, DoctorException, IOException, TimeDateException, MessagingException;
 	
 	
 	public List<Appointment> getAllAppointmenPatientWise(String key)throws AppointmentException, PatientException;
