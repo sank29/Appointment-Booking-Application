@@ -229,21 +229,19 @@ public class PatientServiceImpl implements PatientService {
 		
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
 		
+		// setting patient in appointment
+		appointment.setPatient(patient.get());
+		
 		if(patient.isPresent()) {
-			
-			// setting patient in appointment
-			appointment.setPatient(patient.get());
-			
+
 			Doctor doctor = appointment.getDoctor();
-			
-			
-					
-			Optional<Doctor> registerDoctors = doctorDao.findById(doctor.getDoctorId());
-			
-			// setting doctor in appointment
-			appointment.setDoctor(registerDoctors.get());
-			
+
+			Optional<Doctor> registerDoctors = doctorDao.findById(doctor.getDoctorId()); 
+
 			if(!registerDoctors.isEmpty()) {
+				
+				// setting doctor in appointment
+				appointment.setDoctor(registerDoctors.get());
 				
 				// check if appointment date and time is available or not
 				// this line generating time dynamically from doctors choice of work.
@@ -280,7 +278,8 @@ public class PatientServiceImpl implements PatientService {
 					}
 				}
 				
-				System.out.println(myTimeDate);
+				
+				
 				Appointment registerAppointment = null;
 				
 				
@@ -342,6 +341,8 @@ public class PatientServiceImpl implements PatientService {
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
 		
 		if(patient.get() != null) {
+			
+			System.out.println(patient);
 			
 			List<Appointment> listOfAppointments = patient.get().getListOfAppointments();
 			

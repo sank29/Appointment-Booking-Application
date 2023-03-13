@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 
@@ -26,6 +27,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Patient {
 	
 	@Id
@@ -58,7 +60,8 @@ public class Patient {
 	private String type;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appointmentId")
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appointmentId")
+	@OneToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
 	List<Appointment> listOfAppointments = new ArrayList<>();
 	

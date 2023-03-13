@@ -82,8 +82,6 @@ public class PatientController {
 	@PostMapping("/bookAppointment") 
 	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException, DoctorException, IOException, TimeDateException{
 		
-		System.out.println("***" + appointment);
-		
 		if(appointment == null) {
 			throw new AppointmentException("Please enter valid appointment");
 		}
@@ -93,8 +91,6 @@ public class PatientController {
 			Appointment registerAppointment = patientService.bookAppointment(key, appointment);
 			
 			return new ResponseEntity<Appointment>(registerAppointment, HttpStatus.CREATED);
-			
-			
 			
 		}else {
 			
