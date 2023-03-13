@@ -31,4 +31,24 @@ public class EmailSenderServiceImpl implements EmailSenderService{
 	
 	}
 
+	@Override
+	public Boolean sendApppintmentBookingCancelMain(String toEmail, String subject, String body)
+			throws MessagingException {
+		
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		
+		simpleMailMessage.setFrom("wankhedes29@gmail.com");
+		
+		simpleMailMessage.setTo(toEmail);
+		simpleMailMessage.setText(body);
+		simpleMailMessage.setSubject(subject);
+		
+		javaMailSender.send(simpleMailMessage);
+		
+		
+		return true;
+	}
+	
+	
+
 }
