@@ -67,7 +67,6 @@ public class Doctor {
 	
 	// put time only 24 hours formate
 	
-	
 	private Integer appointmentToTime;
 	
 	// for checking this is doctor or patient

@@ -1,6 +1,7 @@
 package com.sanket.service;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sanket.entity.Appointment;
@@ -186,6 +188,8 @@ public class DoctorServiceImpl implements DoctorService{
 		
 		LocalDateTime currentTimeAndDate = LocalDateTime.now();
 		
+		testing();
+		
 		
 		try {
 			
@@ -215,6 +219,18 @@ public class DoctorServiceImpl implements DoctorService{
 			throw new AppointmentException("No past appointments. Sorry!");
 			
 		}
+	}
+	
+	public static void testing() {
+		
+		 int strength = 10; // work factor of bcrypt
+		 
+		 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
+		 
+		 String encodedPassword = bCryptPasswordEncoder.encode("1234");
+		 
+		 System.out.println(bCryptPasswordEncoder.matches("Sanket", encodedPassword)); 
+		 
 	}
 
 }
