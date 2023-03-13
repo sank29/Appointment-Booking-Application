@@ -51,22 +51,25 @@ public class Doctor {
 	
 	private String location;
 	
+//	@Column(name = "insurance")
 	private Boolean insuranceAcceptance;
 	
 	private String education;
 	
 	private String experience;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "appointmentId")
 	@JsonIgnore
 	List<Appointment> listOfAppointments = new ArrayList<>();
 	
 	// put time only 24 hours formate
 	
+//	@Column(name = "from")
 	private Integer appointmentFromTime;
 	
 	// put time only 24 hours formate
 	
+//	@Column(name = "to")
 	private Integer appointmentToTime;
 	
 	// for checking this is doctor or patient

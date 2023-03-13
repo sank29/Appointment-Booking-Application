@@ -58,7 +58,7 @@ public class Patient {
 	private String type;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appointmentId")
 	@JsonIgnore
 	List<Appointment> listOfAppointments = new ArrayList<>();
 	
