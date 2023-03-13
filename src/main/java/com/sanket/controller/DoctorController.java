@@ -103,6 +103,42 @@ public class DoctorController {
 		}
 		
 	}
+	
+	@GetMapping("/getAllAppointments")
+	public ResponseEntity<List<Appointment>> getAllAppointments(@RequestParam String key) throws LoginException, PatientException, AppointmentException, DoctorException{
+		
+		if(doctorLoginService.checkUserLoginOrNot(key)) { 
+			
+			CurrentSession currentUserSession = doctorService.getCurrentUserByUuid(key);
+			
+			Doctor registerDoctor = doctorService.getDoctorByUuid(key);
+			
+			if(!currentUserSession.getUserType().equals("doctor")) { 
+				
+				throw new LoginException("Please login as doctor");
+				
+			}
+			
+			if(registerDoctor != null) {
+				
+				List<Appointment> listOfUpPastAppointment = doctorService.getAllAppointments(registerDoctor);
+				
+				return new ResponseEntity<List<Appointment>>(listOfUpPastAppointment, HttpStatus.ACCEPTED);
+				
+				
+			}else {
+				
+				throw new DoctorException("Please enter valid doctor details");
+				
+			}
+		
+		}else {
+			
+			throw new LoginException("Please enter valid key");
+			
+		}
+		
+	}
 
 }
 

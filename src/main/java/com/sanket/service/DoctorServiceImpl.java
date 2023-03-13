@@ -233,6 +233,21 @@ public class DoctorServiceImpl implements DoctorService{
 		 
 	}
 
+	@Override
+	public List<Appointment> getAllAppointments(Doctor registerDoctor) throws DoctorException {
+		
+		List<Appointment> listOfAppointments = registerDoctor.getListOfAppointments();
+		
+		if(!listOfAppointments.isEmpty()) {
+			
+			return listOfAppointments;
+			
+		}else {
+			
+			throw new DoctorException("No appointments found.");
+		}
+	}
+
 }
 
 
