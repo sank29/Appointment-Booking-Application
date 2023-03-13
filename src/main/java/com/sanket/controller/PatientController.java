@@ -27,6 +27,8 @@ import com.sanket.service.DoctorService;
 import com.sanket.service.PatientAndAdminLoginService;
 import com.sanket.service.PatientService;
 
+import jakarta.mail.MessagingException;
+
 
 @RestController
 public class PatientController {
@@ -80,7 +82,7 @@ public class PatientController {
 	}
 	
 	@PostMapping("/bookAppointment") 
-	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException, DoctorException, IOException, TimeDateException{
+	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException, DoctorException, IOException, TimeDateException, MessagingException{
 		
 		if(appointment == null) {
 			throw new AppointmentException("Please enter valid appointment");

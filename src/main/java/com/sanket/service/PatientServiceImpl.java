@@ -1,12 +1,10 @@
 package com.sanket.service;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,9 @@ import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
 import com.sanket.exception.TimeDateException;
 import com.sanket.repository.SessionDao;
+
+import jakarta.mail.MessagingException;
+
 import com.sanket.repository.AppointmentDao;
 import com.sanket.repository.DoctorDao;
 import com.sanket.repository.PatientDao;
@@ -52,6 +53,9 @@ public class PatientServiceImpl implements PatientService {
 	
 	@Autowired
 	DoctorDao doctorDao;
+	
+	@Autowired
+	EmailSenderService emailSenderService;
 
 	@Override
 	public Patient createPatient(Patient patient) throws PatientException {
@@ -223,16 +227,18 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException, DoctorException, IOException, TimeDateException {
+	public Appointment bookAppointment(String key, Appointment appointment) throws AppointmentException, LoginException, DoctorException, IOException, TimeDateException, MessagingException {
 		
 		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
 		
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
 		
-		// setting patient in appointment
-		appointment.setPatient(patient.get());
+		
 		
 		if(patient.isPresent()) {
+			
+			// setting patient in appointment
+			appointment.setPatient(patient.get());
 
 			Doctor doctor = appointment.getDoctor();
 
@@ -286,7 +292,35 @@ public class PatientServiceImpl implements PatientService {
 				
 				if(!flag1 && flag2) {
 					
+					
+					
 					registerAppointment = appointmentDao.save(appointment);
+					
+					
+					// sending mail to patient for successfully booking of appointment 
+					
+					String subject = "You have successfully book appointment at " + appointment.getAppointmentDateAndTime();
+					
+					String body = "Dear Sir/Ma'am, \n You have booked appointment to the " + appointment.getDoctor().getName() +
+							". Please make sure to join on time. If you want to call a doctor please contact to " + appointment.getDoctor().getMobileNo()+"\n"
+							
+							+"\n"
+							+"Appointment Id: " + appointment.getAppointmentId()+"\n"
+							+"Doctor specialty: " + appointment.getDoctor().getSpecialty()+"\n"
+							+"Doctor education: " + appointment.getDoctor().getEducation()+"\n"
+							+"Doctor experience: " + appointment.getDoctor().getExperience() +"\n"
+							+"\n"
+							
+							+"Thanks and Regards \n"
+							+"Appointment Booking Application"
+							;
+					
+					
+					
+					emailSenderService.sendAppointmentBookingDoneMail(appointment.getPatient().getEmail(), subject,
+							
+							
+							body);
 					
 				}else {
 					
