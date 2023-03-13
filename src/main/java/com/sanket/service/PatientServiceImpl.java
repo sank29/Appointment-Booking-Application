@@ -541,6 +541,95 @@ public class PatientServiceImpl implements PatientService {
 		
 	}
 
+	@Override
+	public Appointment deleteAppointment(Appointment appointment) throws Exception {
+		
+		Optional<Appointment> registerAppointment = appointmentDao.findById(appointment.getAppointmentId());
+		
+		// check booking appointment time is left or not 
+		
+		LocalDateTime localDateTime = LocalDateTime.now();
+		
+		if(localDateTime.isAfter(registerAppointment.get().getAppointmentDateAndTime())) {
+			
+			throw new TimeDateException("Appointment time already exceeded. You can't cancel the appointment.");
+			
+		}
+		
+		// check appointment is exist or not
+		if(registerAppointment.isPresent()) {
+			
+			
+			// check doctor is exist or not
+			Optional<Doctor> registerDoctor = doctorDao.findById(appointment.getDoctor().getDoctorId());
+			
+			if(registerDoctor.isPresent()) {
+				
+				
+				
+				Optional<Patient> registerPatient = patientDao.findById(appointment.getPatient().getPatientId());
+				
+				// check patient is exist or not
+				if(registerPatient.isPresent()) {
+					
+					Boolean doctorListFlag = registerDoctor.get().getListOfAppointments().remove(registerAppointment.get());
+					
+					Boolean patientListFlag = registerPatient.get().getListOfAppointments().remove(registerAppointment.get());
+					
+					if(doctorListFlag && patientListFlag) {
+						
+//						doctorDao.save(registerDoctor.get());
+//						
+//						patientDao.save(registerPatient.get());
+						
+						appointmentDao.delete(registerAppointment.get());
+						
+						// sending mail to patient for successfully canceling booking of appointment 
+						
+						String subject = "Cancel Appointment Booking: " + appointment.getAppointmentDateAndTime() + " successfully";
+						
+						String body = "Dear Sir/Ma'am, \n You have cancel appointment to the " + registerAppointment.get().getDoctor().getName() +
+								". Please make sure to join on time. If you want to call a doctor please contact to " + registerAppointment.get().getDoctor().getMobileNo()+"\n"
+								
+								+"\n"
+								+"Appointment Id: " + registerAppointment.get().getAppointmentId()+"\n"
+								+"Doctor specialty: " + registerAppointment.get().getDoctor().getSpecialty()+"\n"
+								+"Doctor education: " + registerAppointment.get().getDoctor().getEducation()+"\n"
+								+"Doctor experience: " + registerAppointment.get().getDoctor().getExperience() +"\n"
+								+"\n"
+								
+								+"Thanks and Regards \n"
+								+"Appointment Booking Application"
+								;
+						emailSenderService.sendApppintmentBookingCancelMain(registerAppointment.get().getPatient().getEmail(), subject, body);
+						
+						return registerAppointment.get();
+						
+					}else {
+						
+						throw new Exception("Something went wrong. Appointment did not cancel");
+						
+					}
+					
+					
+				}else {
+					
+					throw new PatientException("No patient found with this id " + appointment.getPatient().getPatientId());
+				}
+				
+			}else {
+				
+				throw new DoctorException("No doctor found with this id " + appointment.getDoctor().getDoctorId());
+			}
+			
+			
+		}else {
+			
+			throw new AppointmentException("Appointment did not found " + appointment.getAppointmentId());
+		}
+		
+	}
+
 }
 
 
