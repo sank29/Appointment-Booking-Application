@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
+import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
@@ -35,4 +36,5 @@ public interface PatientService {
 	
 	public Appointment updateAppointment(String key, Appointment newAppointment) throws AppointmentException, PatientException, DoctorException, IOException, TimeDateException;
 	
+	public List<Doctor> getAllDoctors() throws DoctorException;
 }

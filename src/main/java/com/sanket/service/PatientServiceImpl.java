@@ -525,6 +525,22 @@ public class PatientServiceImpl implements PatientService {
 		
 	}
 
+	@Override
+	public List<Doctor> getAllDoctors() throws DoctorException {
+		
+		List<Doctor> listOfDoctors = doctorDao.findAll();
+		
+		if(!listOfDoctors.isEmpty()) {
+			
+			return listOfDoctors;
+			
+		}else {
+			
+			throw new DoctorException("No doctors register. Please contact admin.");
+		}
+		
+	}
+
 }
 
 

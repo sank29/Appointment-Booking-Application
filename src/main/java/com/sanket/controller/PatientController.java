@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.print.Doc;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -147,6 +149,22 @@ public class PatientController {
 			List<LocalDateTime> listOfAvailable = doctorService.getDoctorAvailableTimingForBooking(key, doctor);
 			
 			return new ResponseEntity<List<LocalDateTime>>(listOfAvailable, HttpStatus.ACCEPTED);
+			
+			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+	}
+	
+	@GetMapping("/getAllDoctors")
+	public ResponseEntity<List<Doctor>> getAllDoctors(@RequestParam String key) throws LoginException, DoctorException{
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			List<Doctor> listOfDoctors = patientService.getAllDoctors();
+			
+			return new ResponseEntity<List<Doctor>>(listOfDoctors, HttpStatus.ACCEPTED);
 			
 			 
 		}else {
