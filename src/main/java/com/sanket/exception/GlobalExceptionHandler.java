@@ -12,7 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(PatientException.class)
-	public ResponseEntity<MyErrorDetails> userExceptiionHandler(PatientException patientException, WebRequest webRequest){
+	public ResponseEntity<MyErrorDetails> patientExceptiionHandler(PatientException patientException, WebRequest webRequest){
 		
 		MyErrorDetails myErrorDetails = new MyErrorDetails();
 		
@@ -24,12 +24,48 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(LoginException.class)
-	public ResponseEntity<MyErrorDetails> userExceptiionHandler(LoginException loginException, WebRequest webRequest){
+	public ResponseEntity<MyErrorDetails> loginExceptiionHandler(LoginException loginException, WebRequest webRequest){
 		
 		MyErrorDetails myErrorDetails = new MyErrorDetails();
 		
 		myErrorDetails.setDetails(webRequest.getDescription(false));
 		myErrorDetails.setErrorMsg(loginException.getMessage());
+		myErrorDetails.setLocalDateTime(LocalDateTime.now());
+		
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(AppointmentException.class)
+	public ResponseEntity<MyErrorDetails> AppointmentExceptiionHandler(AppointmentException appointmentException, WebRequest webRequest){
+		
+		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		
+		myErrorDetails.setDetails(webRequest.getDescription(false));
+		myErrorDetails.setErrorMsg(appointmentException.getMessage());
+		myErrorDetails.setLocalDateTime(LocalDateTime.now());
+		
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(DoctorException.class)
+	public ResponseEntity<MyErrorDetails> doctorExceptiionHandler(DoctorException doctorException, WebRequest webRequest){
+		
+		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		
+		myErrorDetails.setDetails(webRequest.getDescription(false));
+		myErrorDetails.setErrorMsg(doctorException.getMessage());
+		myErrorDetails.setLocalDateTime(LocalDateTime.now());
+		
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(TimeDateException.class)
+	public ResponseEntity<MyErrorDetails> timeDateExceptiionHandler(TimeDateException timeDateException, WebRequest webRequest){
+		
+		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		
+		myErrorDetails.setDetails(webRequest.getDescription(false));
+		myErrorDetails.setErrorMsg(timeDateException.getMessage());
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
 		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
