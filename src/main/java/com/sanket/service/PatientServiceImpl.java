@@ -113,7 +113,7 @@ public class PatientServiceImpl implements PatientService {
 		
 		}else {
 			
-			throw new PatientException("Patient not present by this uuid " + uuid);
+			throw new PatientException("Patient or Admin not present by this uuid " + uuid);
 		}
 	}
 

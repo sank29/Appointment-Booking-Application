@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.ToString;
 
 
 
 
 @Entity
+@ToString
 public class CurrentSession {
 	
 	@Id
