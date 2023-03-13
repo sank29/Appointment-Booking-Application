@@ -46,7 +46,9 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 			
 		}
 		
-		if(existingDoctor.getPassword().equals(loginDTO.getPassword())) {
+		if(PatientServiceImpl.bCryptPasswordEncoder.matches(loginDTO.getPassword(), existingDoctor.getPassword())) {
+		
+//		if(existingDoctor.getPassword().equals(loginDTO.getPassword())) {
 			
 			String key = generateRandomString();
 			

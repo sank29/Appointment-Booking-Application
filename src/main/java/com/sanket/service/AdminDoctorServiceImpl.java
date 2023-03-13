@@ -24,6 +24,8 @@ public class AdminDoctorServiceImpl implements AdminDoctorService {
 			
 			doctor.setType("Doctor"); 
 			
+			doctor.setPassword(PatientServiceImpl.bCryptPasswordEncoder.encode(doctor.getPassword()));
+			
 			return doctorDao.save(doctor);
 			
 		}else {

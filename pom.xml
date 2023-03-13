@@ -58,6 +58,13 @@
 			<version>2.0.0</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-crypto</artifactId>
+		</dependency>
+
+		
 	</dependencies>
 
 	<build>

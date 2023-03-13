@@ -46,7 +46,11 @@ public class PatientAndAdminLoginServiceImpl implements PatientAndAdminLoginServ
 			
 		}
 		
-		if(existingPatient.getPassword().equals(loginDTO.getPassword())) {
+		///////////////////// error ////////////////////////////
+		
+//		if(existingPatient.getPassword().equals(loginDTO.getPassword())) {
+		
+		if(PatientServiceImpl.bCryptPasswordEncoder.matches(loginDTO.getPassword(), existingPatient.getPassword())) {
 			
 			String key = generateRandomString();
 			
@@ -73,8 +77,6 @@ public class PatientAndAdminLoginServiceImpl implements PatientAndAdminLoginServ
 				existingPatient.setType("patient");
 				currentPatientSession.setUserId(existingPatient.getPatientId());
 				currentPatientSession.setUserType("patient");
-				
-			
 				
 			}
 			

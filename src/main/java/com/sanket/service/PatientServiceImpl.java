@@ -3,6 +3,7 @@ package com.sanket.service;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sanket.entity.Appointment;
@@ -33,6 +35,8 @@ import com.sanket.repository.PatientDao;
 public class PatientServiceImpl implements PatientService {
 	
 	public static Map<String, LocalDateTime> myTimeDate = new LinkedHashMap<>();
+	
+	public static BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10, new SecureRandom());
 	
 	@Autowired
 	PatientDao userDao;
@@ -59,6 +63,10 @@ public class PatientServiceImpl implements PatientService {
 			// setting type patient because we have to check this is patient or doctor
 			
 			patient.setType("Patient");
+			
+			// encoding password
+			
+			patient.setPassword(bCryptPasswordEncoder.encode(patient.getPassword()));
 			
 			userDao.save(patient);
 			
