@@ -33,7 +33,7 @@ import com.sanket.repository.DoctorDao;
 import com.sanket.repository.PatientDao;
 
 @Service
-public class PatientServiceImpl implements PatientService {
+public class PatientServiceImpl implements PatientService, Runnable {
 	
 	public static Map<String, LocalDateTime> myTimeDate = new LinkedHashMap<>();
 	
@@ -315,12 +315,23 @@ public class PatientServiceImpl implements PatientService {
 							+"Appointment Booking Application"
 							;
 					
+					////////////////////////////////
+					
+					PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
+					
+					Thread emailSentThread = new Thread(patientServiceImpl);
+					
+					emailSentThread.start();
+					
+					
+					///////////////////////////////
 					
 					
 					emailSenderService.sendAppointmentBookingDoneMail(appointment.getPatient().getEmail(), subject,
 							
 							
 							body);
+					
 					
 				}else {
 					
@@ -628,6 +639,16 @@ public class PatientServiceImpl implements PatientService {
 			throw new AppointmentException("Appointment did not found " + appointment.getAppointmentId());
 		}
 		
+	}
+
+	@Override
+	public void run() {
+		
+		for(int i = 0; i<= 10000; i++) {
+			
+			System.out.println("****************  New thread");
+			
+		}
 	}
 
 }
