@@ -123,7 +123,7 @@ public class PatientController {
 		
 	}
 	
-	@PostMapping("/updateAppointment")
+	@PutMapping("/updateAppointment")
 	public ResponseEntity<Appointment> updateAppointment(@RequestParam String key, @RequestBody Appointment newAppointment) throws LoginException, AppointmentException, PatientException, DoctorException, IOException, TimeDateException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
