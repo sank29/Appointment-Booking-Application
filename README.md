@@ -40,23 +40,23 @@ A web application using Spring Boot that enables users to search and book appoin
 
 - Patient, Admin, Doctor authentication & validation with session UUID.
 - Admin Features:
- - Admin can register Doctor in database
- - Admin can register and login into application
+  - Admin can register Doctor in database
+  - Admin can register and login into application
 - Patient Features:
- - Patient can register, update and login
- - Patient can book appointment, update appointment and delete appointment
- - Patient can get all doctor register in database by admin
- - Patient can see available doctors
- - Patient can see available timing of doctors
- - Patient can see the upcomming appointment
+  - Patient can register, update and login
+  - Patient can book appointment, update appointment and delete appointment
+  - Patient can get all doctor register in database by admin
+  - Patient can see available doctors
+  - Patient can see available timing of doctors
+  - Patient can see the upcomming appointment
 - Doctor Features:
- - Doctor can see upcomming appointment
- - Doctor can see past appointment
- - Doctor can get all list of appointment
- - Doctor can update, delete appointment
+  - Doctor can see upcomming appointment
+  - Doctor can see past appointment
+  - Doctor can get all list of appointment
+  - Doctor can update, delete appointment
 - Email Features:
- - Patient will get email by successfully booking of appointment
- - Patient can get email after successfully cancel the appointment
+  - Patient will get email by successfully booking of appointment
+  - Patient can get email after successfully cancel the appointment
  
  ## Installation and Run
 
