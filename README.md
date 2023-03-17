@@ -75,7 +75,7 @@ spring.jpa.show-sql=true
 spring.mvc.throw-exception-if-no-handler-found=true
 spring.web.resources.add-mappings=false
 #swagger-ui
-spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
+spring.mvc.pathmatch.matching-strategy=ANT_PATH_MATCHER
 ```
 
 ## API Root and Endpoint
