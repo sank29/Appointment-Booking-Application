@@ -39,6 +39,7 @@ A web application using Spring Boot that enables users to search and book appoin
 ## Features
 
 - Patient, Admin, Doctor authentication & validation with session UUID.
+- Password will store using bcrypt-password-encoder.
 - Admin Features:
   - Admin can register Doctor in database
   - Admin can register and login into application
