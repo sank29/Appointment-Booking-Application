@@ -18,7 +18,7 @@ public class EmailSenderServiceImpl implements EmailSenderService{
 		
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		
-		simpleMailMessage.setFrom("wankhedes29@gmail.com");
+		simpleMailMessage.setFrom("sank98.sank98@gmail.com");
 		
 		simpleMailMessage.setTo(toEmail);
 		simpleMailMessage.setText(body);
@@ -37,7 +37,7 @@ public class EmailSenderServiceImpl implements EmailSenderService{
 		
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		
-		simpleMailMessage.setFrom("wankhedes29@gmail.com");
+		simpleMailMessage.setFrom("sank98.sank98@gmail.com");
 		
 		simpleMailMessage.setTo(toEmail);
 		simpleMailMessage.setText(body);

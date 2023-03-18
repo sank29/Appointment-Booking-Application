@@ -606,7 +606,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 								+"Appointment Id: " + registerAppointment.get().getAppointmentId()+"\n"
 								+"Doctor specialty: " + registerAppointment.get().getDoctor().getSpecialty()+"\n"
 								+"Doctor education: " + registerAppointment.get().getDoctor().getEducation()+"\n"
-								+"Doctor experience: " + registerAppointment.get().getDoctor().getExperience() +"\n"
+								+"Doctor experience : " + registerAppointment.get().getDoctor().getExperience() +"\n"
 								+"\n"
 								
 								+"Thanks and Regards \n"
