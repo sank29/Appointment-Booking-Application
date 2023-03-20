@@ -1,11 +1,12 @@
 package com.sanket.service;
 
+import com.sanket.entity.EmailBody;
+
 import jakarta.mail.MessagingException;
 
 public interface EmailSenderService {
 	
-	public Boolean sendAppointmentBookingDoneMail(String toEmail, String subject,String body) throws MessagingException;
+	public Boolean sendAppointmentBookingMail(String toEmail, EmailBody emailBody) throws MessagingException;
 	
-	public Boolean sendApppintmentBookingCancelMain(String toEmail, String subject, String body) throws MessagingException;
 
 }

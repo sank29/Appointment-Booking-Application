@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
+import com.sanket.entity.EmailBody;
 import com.sanket.entity.Patient;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
@@ -55,7 +56,22 @@ public class PatientServiceImpl implements PatientService, Runnable {
 	DoctorDao doctorDao;
 	
 	@Autowired
+	Appointment savedAppointment;
+	
+	@Autowired
 	EmailSenderService emailSenderService;
+	
+	@Autowired
+	EmailBody emailBody;
+	
+	public PatientServiceImpl(Appointment appointment, EmailSenderService emailSenderService, EmailBody emailBody) {
+		
+		this.savedAppointment = appointment;
+		this.emailSenderService = emailSenderService;
+		
+		this.emailBody = emailBody;
+	
+	}
 
 	@Override
 	public Patient createPatient(Patient patient) throws PatientException {
@@ -294,43 +310,42 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					
 					
 					
-					registerAppointment = appointmentDao.save(appointment);
-					
-					
-					// sending mail to patient for successfully booking of appointment 
-					
-					String subject = "You have successfully book appointment at " + appointment.getAppointmentDateAndTime();
-					
-					String body = "Dear Sir/Ma'am, \n You have booked appointment to the " + appointment.getDoctor().getName() +
-							". Please make sure to join on time. If you want to call a doctor please contact to " + appointment.getDoctor().getMobileNo()+"\n"
-							
-							+"\n"
-							+"Appointment Id: " + appointment.getAppointmentId()+"\n"
-							+"Doctor specialty: " + appointment.getDoctor().getSpecialty()+"\n"
-							+"Doctor education: " + appointment.getDoctor().getEducation()+"\n"
-							+"Doctor experience: " + appointment.getDoctor().getExperience() +"\n"
-							+"\n"
-							
-							+"Thanks and Regards \n"
-							+"Appointment Booking Application"
-							;
+					registerAppointment = appointmentDao.save(appointment); 
 					
 					////////////////////////////////
 					
-					PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
+					emailBody.setEmailBody("Dear Sir/Ma'am, \n You have booked appointment to the " + registerAppointment.getDoctor().getName() +
+							". Please make sure to join on time. If you want to call a doctor please contact to " + registerAppointment.getDoctor().getMobileNo()+"\n"
+							
+							+"\n"
+							+"Appointment Id: " + registerAppointment.getAppointmentId()+"\n"
+							+"Doctor specialty: " + registerAppointment.getDoctor().getSpecialty()+"\n"
+							+"Doctor education: " + registerAppointment.getDoctor().getEducation()+"\n"
+							+"Doctor experience: " + registerAppointment.getDoctor().getExperience() +"\n"
+							+"\n"
+							
+							+"Thanks and Regards \n"
+							+"Appointment Booking Application");
+					
+					emailBody.setEmailSubject("You have successfully book appointment at " + registerAppointment.getAppointmentDateAndTime());
+					
+					PatientServiceImpl patientServiceImpl = new PatientServiceImpl(appointment, emailSenderService, emailBody);
 					
 					Thread emailSentThread = new Thread(patientServiceImpl);
 					
-					emailSentThread.start();
 					
+					
+					/////////////////////////
+					
+					// Multi-Threading
+					
+					emailSentThread.start();
+	
 					
 					///////////////////////////////
 					
 					
-					emailSenderService.sendAppointmentBookingDoneMail(appointment.getPatient().getEmail(), subject,
-							
-							
-							body);
+					
 					
 					
 				}else {
@@ -357,6 +372,8 @@ public class PatientServiceImpl implements PatientService, Runnable {
 				patient.get().getListOfAppointments().add(registerAppointment);
 				
 				patientDao.save(patient.get());
+				
+				
 				
 				return registerAppointment;
 				
@@ -589,17 +606,11 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					
 					if(doctorListFlag && patientListFlag) {
 						
-//						doctorDao.save(registerDoctor.get());
-//						
-//						patientDao.save(registerPatient.get());
-						
 						appointmentDao.delete(registerAppointment.get());
 						
 						// sending mail to patient for successfully canceling booking of appointment 
 						
-						String subject = "Cancel Appointment Booking: " + appointment.getAppointmentDateAndTime() + " successfully";
-						
-						String body = "Dear Sir/Ma'am, \n You have cancel appointment to the " + registerAppointment.get().getDoctor().getName() +
+						emailBody.setEmailBody( "Dear Sir/Ma'am, \n You have cancel appointment to the " + registerAppointment.get().getDoctor().getName() +
 								". Please make sure to join on time. If you want to call a doctor please contact to " + registerAppointment.get().getDoctor().getMobileNo()+"\n"
 								
 								+"\n"
@@ -610,9 +621,24 @@ public class PatientServiceImpl implements PatientService, Runnable {
 								+"\n"
 								
 								+"Thanks and Regards \n"
-								+"Appointment Booking Application"
-								;
-						emailSenderService.sendApppintmentBookingCancelMain(registerAppointment.get().getPatient().getEmail(), subject, body);
+								+"Appointment Booking Application");
+						
+						emailBody.setEmailSubject("Cancel Appointment Booking: " + appointment.getAppointmentDateAndTime() + " successfully");
+						
+						PatientServiceImpl patientServiceImpl = new PatientServiceImpl(registerAppointment.get(), emailSenderService, emailBody);
+						
+						Thread emailSentThread = new Thread(patientServiceImpl);
+						
+						
+						
+						/////////////////////////
+						
+						// Multi-Threading
+						
+						emailSentThread.start();
+		
+						
+						///////////////////////////////
 						
 						return registerAppointment.get();
 						
@@ -640,16 +666,30 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		}
 		
 	}
+	
 
 	@Override
 	public void run() {
 		
-		for(int i = 0; i<= 10000; i++) {
+		// sending mail to patient for successfully booking of appointment 
+		
+		
+		try {
 			
-			System.out.println("****************  New thread");
+			// sending mail to patient for successfully booking of appointment 
 			
+			System.out.println("*********" + savedAppointment.getPatient().getEmail());
+			
+			emailSenderService.sendAppointmentBookingMail(savedAppointment.getPatient().getEmail(), emailBody);
+			
+		} catch (MessagingException e) {
+			
+			e.printStackTrace();
 		}
+		
 	}
+	
+	
 
 }
 
