@@ -1,10 +1,15 @@
 package com.sanket.entity;
 
 
+import java.beans.JavaBean;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,6 +32,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
+@Component
 public class Appointment {
 	
 	@Id
