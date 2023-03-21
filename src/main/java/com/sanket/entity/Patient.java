@@ -12,7 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -47,6 +49,7 @@ public class Patient {
 	
 	private String name;
 	
+	@Pattern(regexp = "^[0-9]{10}$", message = "Please enter valid mobile number")
 	private String mobileNo;
 	
 	private String password;
