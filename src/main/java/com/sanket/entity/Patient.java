@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -31,20 +32,15 @@ import lombok.ToString;
 public class Patient {
 	
 	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
-	
     generator = "id_table"
-    
 			)
 
 	@SequenceGenerator(
-			
 		name = "id_table",
 		sequenceName = "id_sequence",
 		allocationSize = 1
-		
 	)
 	
 	private Integer patientId;
@@ -55,6 +51,7 @@ public class Patient {
 	
 	private String password;
 	
+	@Email(message = "Email should be a valid email")
 	private String email;
 	
 	private String type;
