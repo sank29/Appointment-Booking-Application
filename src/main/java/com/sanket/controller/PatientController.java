@@ -32,6 +32,7 @@ import com.sanket.service.PatientAndAdminLoginService;
 import com.sanket.service.PatientService;
 
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -49,7 +50,7 @@ public class PatientController {
 	
 	@CrossOrigin
 	@PostMapping("/registerPatient")
-	public ResponseEntity<Patient> saveCustomer(@RequestBody Patient patient) throws PatientException{
+	public ResponseEntity<Patient> saveCustomer(@Valid @RequestBody Patient patient) throws PatientException{
 		
 		Patient savedUser= patientService.createPatient(patient);
 		

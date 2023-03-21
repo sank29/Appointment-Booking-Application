@@ -19,6 +19,8 @@ import com.sanket.exception.LoginException;
 import com.sanket.service.DoctorLoginService;
 import com.sanket.service.PatientAndAdminLoginService;
 
+import jakarta.validation.Valid;
+
 
 
 @RestController

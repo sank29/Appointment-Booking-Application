@@ -1,12 +1,18 @@
 package com.sanket.exception;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+
+import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -69,6 +75,31 @@ public class GlobalExceptionHandler {
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
 		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<MyErrorDetails> constraintExceptionHandler(MethodArgumentNotValidException constraintViolationException, WebRequest webRequest){
+		
+		List<String> details = new ArrayList<>();
+		
+		for(ObjectError error : constraintViolationException.getBindingResult().getAllErrors()) {
+			
+		      details.add(error.getDefaultMessage());
+		      
+		}
+		
+		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		
+		myErrorDetails.setDetails(webRequest.getDescription(false));
+		
+		
+		myErrorDetails.setErrorMsg(details.get(0));
+		
+		
+		myErrorDetails.setLocalDateTime(LocalDateTime.now());
+		
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+		
 	}
 	
 	
