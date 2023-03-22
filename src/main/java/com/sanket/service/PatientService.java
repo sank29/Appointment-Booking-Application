@@ -10,10 +10,12 @@ import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
+import com.sanket.entity.Review;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
+import com.sanket.exception.ReviewException;
 import com.sanket.exception.TimeDateException;
 
 import jakarta.mail.MessagingException;
@@ -39,4 +41,6 @@ public interface PatientService {
 	public List<Doctor> getAllDoctors() throws DoctorException;
 	
 	public Appointment deleteAppointment(Appointment appointment) throws AppointmentException, DoctorException, Exception;
+
+	public Review makeReviewToDoctorAppointment(String key, Review review) throws AppointmentException, DoctorException, ReviewException;  
 }

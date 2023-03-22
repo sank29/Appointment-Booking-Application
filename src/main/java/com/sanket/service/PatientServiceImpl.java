@@ -20,10 +20,12 @@ import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.EmailBody;
 import com.sanket.entity.Patient;
+import com.sanket.entity.Review;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
+import com.sanket.exception.ReviewException;
 import com.sanket.exception.TimeDateException;
 import com.sanket.repository.SessionDao;
 
@@ -32,6 +34,7 @@ import jakarta.mail.MessagingException;
 import com.sanket.repository.AppointmentDao;
 import com.sanket.repository.DoctorDao;
 import com.sanket.repository.PatientDao;
+import com.sanket.repository.ReviewDao;
 
 @Service
 public class PatientServiceImpl implements PatientService, Runnable {
@@ -63,6 +66,9 @@ public class PatientServiceImpl implements PatientService, Runnable {
 	
 	@Autowired
 	EmailBody emailBody;
+	
+	@Autowired
+	ReviewDao reviewDao;
 	
 	public PatientServiceImpl(Appointment appointment, EmailSenderService emailSenderService, EmailBody emailBody) {
 		
@@ -687,6 +693,92 @@ public class PatientServiceImpl implements PatientService, Runnable {
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public Review makeReviewToDoctorAppointment(String key, Review review) throws AppointmentException, DoctorException, ReviewException {
+		
+		Optional<Appointment> registerAppointment = appointmentDao.findById(review.getAppointment().getAppointmentId());
+		
+		
+		
+		if(registerAppointment.isPresent()) {
+			
+			CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
+			
+			Optional<Patient> registerPatient = patientDao.findById(currentPatientSession.getUserId());
+			
+			if(registerAppointment.get().getPatient().getPatientId() == registerPatient.get().getPatientId()) {
+				
+				Optional<Doctor> registerDoctor = doctorDao.findById(review.getDoctor().getDoctorId());
+				
+				
+				if(registerDoctor.isPresent()) {
+					
+					// we need to check if the appointment time is over or not default appointment time is 1 hour 
+					// we have to check if present time is > appointment time + 1 hour
+					
+					LocalDateTime appointmentDate = registerAppointment.get().getAppointmentDateAndTime().plusHours(1); // added one hour in local date
+					
+					LocalDateTime presentTime = LocalDateTime.now();
+					
+					if(appointmentDate.isAfter(presentTime)) {
+						
+						Review registerReview = registerAppointment.get().getReview();
+						
+						if(registerReview == null) {
+							
+							review.setAppointment(registerAppointment.get());
+							review.setDoctor(registerDoctor.get());
+							review.setPatient(registerPatient.get());
+							
+							
+							
+							
+							
+							Review registerReview2 = reviewDao.save(review);
+							
+							// map review to doctor
+							registerDoctor.get().getListOfReviews().add(registerReview2);
+							doctorDao.save(registerDoctor.get());
+							
+							// map review to patient
+							registerPatient.get().getListReviews().add(registerReview2);
+							patientDao.save(registerPatient.get());
+							
+							// map review to appointment
+							registerAppointment.get().setReview(registerReview2);
+							appointmentDao.save(registerAppointment.get());
+							
+							return registerReview2;
+							
+							
+						}else {
+							
+							throw new ReviewException("Review already present please edit review");
+						}
+						
+					}else {
+						
+						throw new AppointmentException("Please make sure appointment is over or not. Try again later.");
+					}
+					
+					
+				}else {
+					
+					throw new DoctorException("Doctor not found with this id " + review.getDoctor().getDoctorId());
+				}
+				
+			}else {
+				
+				throw new AppointmentException("Please enter valid patient in appointment"); 
+			}
+			
+		}else {
+			
+			throw new AppointmentException("This appointment id " + review.getAppointment().getAppointmentId() + " does not exist in database ");
+		}
+
 	}
 	
 	

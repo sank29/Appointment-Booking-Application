@@ -27,12 +27,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 		
 		System.out.println(localDateTime);
 		
-		listOfDoctors.forEach(doctors -> {
-			
-			
-			
-			
-			
+		listOfDoctors.forEach(doctors -> {	
 			
 		});
 	}

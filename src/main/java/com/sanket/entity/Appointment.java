@@ -20,6 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,20 +38,24 @@ public class Appointment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Integer appointmentId;
+	private Integer appointmentId;
 	
 	@ManyToOne
-	Patient patient;
+	private Patient patient;
 	
 	
 	// Appointement default time will be 15 mins from appoaintment start time.
 	
 
-	LocalDateTime appointmentDateAndTime;
+	private LocalDateTime appointmentDateAndTime;
 	
 	
 	@ManyToOne
-	Doctor doctor;
+	private Doctor doctor;
+	
+	@OneToOne
+	@JsonIgnore
+	private Review review;
 
 
 	@Override

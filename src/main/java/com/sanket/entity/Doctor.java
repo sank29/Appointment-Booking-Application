@@ -77,6 +77,11 @@ public class Doctor {
 	
 	private String type;
 	
+	@OneToMany
+	@JsonIgnore
+	private List<Review> listOfReviews = new ArrayList<>();
+	
+	
 }
 
 

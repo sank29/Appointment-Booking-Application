@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sanket.entity.Appointment;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
+import com.sanket.entity.Review;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
+import com.sanket.exception.ReviewException;
 import com.sanket.exception.TimeDateException;
 import com.sanket.service.DoctorService;
 import com.sanket.service.PatientAndAdminLoginService;
@@ -185,6 +187,23 @@ public class PatientController {
 			Appointment listOfDoctors = patientService.deleteAppointment(appointment); 
 			
 			return new ResponseEntity<Appointment>(listOfDoctors, HttpStatus.ACCEPTED);
+			
+			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+	}
+	
+	@PostMapping("/review")
+	public ResponseEntity<Review> makeReviewToDoctorAppointment(@RequestParam String key, @RequestBody Review review) throws LoginException, AppointmentException, DoctorException, ReviewException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			Review returnReiew = patientService.makeReviewToDoctorAppointment(key, review);  
+			
+			return new ResponseEntity<Review>(returnReiew, HttpStatus.ACCEPTED);
 			
 			 
 		}else {
