@@ -60,6 +60,10 @@ public class Patient {
 	@JsonIgnore
 	List<Appointment> listOfAppointments = new ArrayList<>();
 	
+	@OneToMany
+	@JsonIgnore
+	List<Review> listReviews = new ArrayList<>();
+	
 
 }
 
