@@ -213,6 +213,24 @@ public class PatientController {
 		}
 	}
 	
+	@GetMapping("/rating")
+	public ResponseEntity<Float> getDoctorRating(@RequestParam String key, @RequestBody Doctor doctor) throws LoginException, DoctorException, ReviewException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			Float rating = patientService.getDoctorRating(key, doctor);  
+			
+			
+			return new ResponseEntity<Float>(rating, HttpStatus.ACCEPTED);
+			
+			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+	}
+	
 
 }
 

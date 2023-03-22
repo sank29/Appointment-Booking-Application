@@ -3,6 +3,7 @@ package com.sanket.service;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
@@ -722,7 +723,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					
 					LocalDateTime presentTime = LocalDateTime.now();
 					
-					if(appointmentDate.isAfter(presentTime)) {
+					if(appointmentDate.isBefore(presentTime)) {
 						
 						Review registerReview = registerAppointment.get().getReview();
 						
@@ -731,9 +732,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 							review.setAppointment(registerAppointment.get());
 							review.setDoctor(registerDoctor.get());
 							review.setPatient(registerPatient.get());
-							
-							
-							
 							
 							
 							Review registerReview2 = reviewDao.save(review);
@@ -761,6 +759,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					}else {
 						
 						throw new AppointmentException("Please make sure appointment is over or not. Try again later.");
+						
 					}
 					
 					
@@ -780,9 +779,46 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		}
 
 	}
-	
-	
 
+	@Override
+	public Float getDoctorRating(String key, Doctor doctor) throws DoctorException, ReviewException {
+		
+		Optional<Doctor> registerDoctor = doctorDao.findById(doctor.getDoctorId());
+		
+		if(registerDoctor.isPresent()) {
+			
+			List<Review> listOfReview = registerDoctor.get().getListOfReviews();
+			
+			Float rating = 0.0f;
+			
+			if(!listOfReview.isEmpty()) {
+				
+				for(Review eachReview : listOfReview) {
+					
+					rating += eachReview.getRating();
+				}
+				
+			}else {
+				
+				throw new ReviewException("No review found with this doctor"); 
+				
+			}
+			
+			// formating our result in only one digit decimal
+			
+			DecimalFormat decimalFormat = new DecimalFormat("#.#");
+			
+			rating = rating/listOfReview.size();
+			
+			return Float.valueOf(decimalFormat.format(rating));
+			
+		}else {
+			
+			throw new DoctorException("Doctor not present in database");
+		}
+		
+	}
+	
 }
 
 
