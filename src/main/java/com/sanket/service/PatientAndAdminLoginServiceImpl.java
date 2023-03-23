@@ -40,15 +40,35 @@ public class PatientAndAdminLoginServiceImpl implements PatientAndAdminLoginServ
 		
 		Optional<CurrentSession> validCustomerSessionOpt = sessionDao.findById(existingPatient.getPatientId());
 		
+		////////////////////////////////
+		
+		// this code is for only frontend application
+		
 		if(validCustomerSessionOpt.isPresent()) {
 			
-			throw new LoginException("User already login");
+			if(PatientServiceImpl.bCryptPasswordEncoder.matches(loginDTO.getPassword(), existingPatient.getPassword())){
+				
+				loginUUIDKey.setUuid(validCustomerSessionOpt.get().getUuid());
+				loginUUIDKey.setMsg("Login Successful");
+				return loginUUIDKey;
+				
+			}
+			
+			throw new LoginException("Please enter valid details");
+		
 			
 		}
 		
-		///////////////////// error ////////////////////////////
+		/////////////////////////////////////////////
 		
-//		if(existingPatient.getPassword().equals(loginDTO.getPassword())) {
+		
+		// please do uncomment this code while using this application in postman
+//		if(validCustomerSessionOpt.isPresent()) {
+//			
+//			throw new LoginException("User already login");
+//			
+//		}
+		
 		
 		if(PatientServiceImpl.bCryptPasswordEncoder.matches(loginDTO.getPassword(), existingPatient.getPassword())) {
 			
