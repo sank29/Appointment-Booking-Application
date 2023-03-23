@@ -49,6 +49,7 @@ public class Patient {
 	@Pattern(regexp = "^[0-9]{10}$", message = "Please enter valid mobile number")
 	private String mobileNo;
 	
+	@JsonIgnore
 	private String password;
 	
 	@Email(message = "Email should be a valid email")
