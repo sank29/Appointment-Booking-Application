@@ -30,7 +30,7 @@ A web application using Spring Boot that enables users to search and book appoin
 
 ## ER Diagram
 
-![newErDiagram](https://user-images.githubusercontent.com/76080960/225696890-7bbac1fd-7253-402a-8c8e-9980c70e5f9e.png)
+![appointment-new-erDiagram](https://user-images.githubusercontent.com/76080960/227708841-feffffa8-8d04-4dda-aba6-4175bea89995.png)
 
 ## Service Interface
 
