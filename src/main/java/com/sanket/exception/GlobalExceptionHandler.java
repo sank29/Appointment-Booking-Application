@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
 		myErrorDetails.setErrorMsg(appointmentException.getMessage());
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(DoctorException.class)
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
 		myErrorDetails.setErrorMsg(doctorException.getMessage());
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(TimeDateException.class)
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
 		myErrorDetails.setErrorMsg(timeDateException.getMessage());
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -98,7 +98,7 @@ public class GlobalExceptionHandler {
 		
 		myErrorDetails.setLocalDateTime(LocalDateTime.now());
 		
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<MyErrorDetails>(myErrorDetails,HttpStatus.BAD_REQUEST);
 		
 	}
 	

@@ -43,7 +43,7 @@ public class Doctor {
 	
 	private String mobileNo;
 	
-	@JsonIgnore
+	
 	private String password;
 	
 	private String name;

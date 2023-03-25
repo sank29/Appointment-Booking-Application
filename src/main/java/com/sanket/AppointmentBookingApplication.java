@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AppointmentBookingApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		
-		SpringApplication.run(AppointmentBookingApplication.class, args);
+		SpringApplication.run(AppointmentBookingApplication.class, args);  
 		
 	}
 	
