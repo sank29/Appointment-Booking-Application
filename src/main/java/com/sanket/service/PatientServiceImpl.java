@@ -75,7 +75,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		
 		this.savedAppointment = appointment;
 		this.emailSenderService = emailSenderService;
-		
 		this.emailBody = emailBody;
 	
 	}

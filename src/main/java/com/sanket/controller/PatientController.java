@@ -72,6 +72,7 @@ public class PatientController {
 	
 	
 	@GetMapping("/doctors")
+	@CrossOrigin
 	public ResponseEntity<List<Doctor>> getAllDoctorsFromDataBase(@RequestParam String key) throws LoginException, DoctorException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
@@ -164,6 +165,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/getAllDoctors")
+	@CrossOrigin
 	public ResponseEntity<List<Doctor>> getAllDoctors(@RequestParam String key) throws LoginException, DoctorException{
 		if(loginService.checkUserLoginOrNot(key)) {
 			
@@ -213,6 +215,7 @@ public class PatientController {
 		}
 	}
 	
+	@CrossOrigin
 	@GetMapping("/rating")
 	public ResponseEntity<Float> getDoctorRating(@RequestParam String key, @RequestBody Doctor doctor) throws LoginException, DoctorException, ReviewException{
 		
