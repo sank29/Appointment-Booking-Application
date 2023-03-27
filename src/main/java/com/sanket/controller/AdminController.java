@@ -60,7 +60,7 @@ public class AdminController {
 		
 		}else {
 			
-			throw new LoginException("Please enter valid key");
+			throw new LoginException("Please enter valid key.");
 		}
 		
 		
