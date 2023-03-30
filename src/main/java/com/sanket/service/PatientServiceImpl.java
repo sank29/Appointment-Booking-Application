@@ -356,7 +356,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					
 				}else {
 					
-					throw new AppointmentException("This time or date already booked. Please enter valid appointment time and date " + appointment.getAppointmentDateAndTime());
+					throw new AppointmentException("This time or date already booked or please enter valid appointment time and date " + appointment.getAppointmentDateAndTime());
 					
 				}
 				
