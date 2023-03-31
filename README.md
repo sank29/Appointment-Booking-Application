@@ -46,7 +46,7 @@ A web application using Spring Boot that enables users to search and book appoin
 - Patient Features:
   - Patient can register, update and login
   - Patient can book appointment, update appointment and delete appointment
-  - Patient can get all doctor register in database by admin
+  - Patient can get all doctor register in database
   - Patient can see available doctors
   - Patient can see available timing of doctors
   - Patient can see the upcomming appointment
