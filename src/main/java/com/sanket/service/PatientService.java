@@ -44,5 +44,7 @@ public interface PatientService {
 
 	public Review makeReviewToDoctorAppointment(String key, Review review) throws AppointmentException, DoctorException, ReviewException;
 
-	public Float getDoctorRating(String key, Doctor doctor) throws DoctorException, ReviewException;   
+	public Float getDoctorRating(String key, Doctor doctor) throws DoctorException, ReviewException;
+
+	public Patient getPatientDetails(String key) throws PatientException;
 }

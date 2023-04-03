@@ -2,6 +2,8 @@ package com.sanket.controller;
 
 import java.util.List;
 
+import javax.print.Doc;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
+import com.sanket.entity.Patient;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
@@ -29,6 +32,22 @@ public class DoctorController {
 	
 	@Autowired
 	DoctorService doctorService;
+	
+	@GetMapping("/getDoctorDetails")
+	public ResponseEntity<Doctor> getDoctorDetails(@RequestParam String key) throws LoginException, PatientException{
+		
+		if(doctorLoginService.checkUserLoginOrNot(key)) {
+			
+			Doctor returnDoctor = doctorService.getDoctorDetails(key); 
+			
+			return new ResponseEntity<Doctor>(returnDoctor, HttpStatus.ACCEPTED);
+		
+		}else {
+			
+			throw new LoginException("Please enter valid key");
+			
+		}
+	}
 	
 	
 	
@@ -139,6 +158,8 @@ public class DoctorController {
 		}
 		
 	}
+	
+
 
 }
 

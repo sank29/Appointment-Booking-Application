@@ -70,6 +70,24 @@ public class PatientController {
 		
 	}
 	
+	@GetMapping("/patientDetails")
+	public ResponseEntity<Patient> getPatientDetails(@RequestParam String key) throws LoginException, PatientException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			Patient returnedPatient = patientService.getPatientDetails(key);
+			
+			return new ResponseEntity<Patient>(returnedPatient, HttpStatus.ACCEPTED);
+			
+			
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+		
+	}
+	
 	
 	@GetMapping("/doctors")
 	@CrossOrigin
