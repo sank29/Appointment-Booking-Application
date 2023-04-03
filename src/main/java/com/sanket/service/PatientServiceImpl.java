@@ -817,6 +817,24 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		}
 		
 	}
+
+	@Override
+	public Patient getPatientDetails(String key) throws PatientException {
+		
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		Optional<Patient> registerPatient = patientDao.findById(currentPatientSession.getUserId());
+		
+		if(registerPatient.isPresent()) {
+			
+			return registerPatient.get();
+			
+			
+		}else {
+			
+			throw new PatientException("Patient not found");
+		}
+	}
 	
 }
 

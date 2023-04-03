@@ -1,6 +1,7 @@
 package com.sanket.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
+import com.sanket.entity.Patient;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.service.AdminDoctorService;
@@ -29,6 +31,7 @@ public class AdminController {
 	
 	@Autowired
 	PatientService patientService;
+	
 	
 	@PostMapping("/registerDoctor")
 	public ResponseEntity<Doctor> registerDocotor(@RequestParam String key, @RequestBody Doctor doctor) throws DoctorException, LoginException {

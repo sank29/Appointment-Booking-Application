@@ -1,8 +1,11 @@
 package com.sanket.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
 import com.sanket.exception.DoctorException;
@@ -35,5 +38,7 @@ public class AdminDoctorServiceImpl implements AdminDoctorService {
 		
 		
 	}
+
+
 
 }

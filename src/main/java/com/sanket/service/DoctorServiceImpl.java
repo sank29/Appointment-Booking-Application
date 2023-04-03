@@ -114,13 +114,13 @@ public class DoctorServiceImpl implements DoctorService{
 	@Override
 	public Doctor getDoctorByUuid(String uuid) throws PatientException {
 		
-		CurrentSession currentPatient = sessionDao.findByUuid(uuid);
+		CurrentSession currentDoctor = sessionDao.findByUuid(uuid);
 		
-		Optional<Doctor> patient = doctorDao.findById(currentPatient.getUserId());
+		Optional<Doctor> doctor = doctorDao.findById(currentDoctor.getUserId());
 		
-		if(patient.isPresent()) {
+		if(doctor.isPresent()) {
 			
-			return patient.get();
+			return doctor.get();
 		
 		}else {
 			
@@ -246,6 +246,25 @@ public class DoctorServiceImpl implements DoctorService{
 			
 			throw new DoctorException("No appointments found.");
 		}
+	}
+
+	@Override
+	public Doctor getDoctorDetails(String key) throws PatientException {
+		
+		CurrentSession currentDoctor = sessionDao.findByUuid(key);
+		
+		Optional<Doctor> doctor = doctorDao.findById(currentDoctor.getUserId());
+		
+		if(doctor.isPresent()) {
+			
+			return doctor.get();
+		
+		}else {
+			
+			throw new PatientException("Doctor not present by this uuid " + key);
+		}
+		
+		
 	}
 
 }

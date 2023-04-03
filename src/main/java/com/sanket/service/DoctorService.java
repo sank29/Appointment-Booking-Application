@@ -35,4 +35,6 @@ public interface DoctorService {
 	
 	public List<Appointment> getAllAppointments(Doctor registerDoctor) throws DoctorException;
 	
+	public Doctor getDoctorDetails(String key) throws PatientException;
+	
 }
