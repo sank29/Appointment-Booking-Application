@@ -34,6 +34,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Component
+@ToString
 public class Appointment {
 	
 	@Id
@@ -88,19 +89,4 @@ public class Appointment {
 	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -71,6 +71,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patientDetails")
+	@CrossOrigin
 	public ResponseEntity<Patient> getPatientDetails(@RequestParam String key) throws LoginException, PatientException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
@@ -108,7 +109,9 @@ public class PatientController {
 	}
 	
 	@PostMapping("/bookAppointment") 
+	@CrossOrigin
 	public ResponseEntity<Appointment> bookAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws LoginException, AppointmentException, DoctorException, IOException, TimeDateException, MessagingException{
+		
 		
 		if(appointment == null) {
 			throw new AppointmentException("Please enter valid appointment");
@@ -165,7 +168,8 @@ public class PatientController {
 		
 	}
 	
-	@GetMapping("/availableTiming")
+	@PostMapping("/availableTiming")
+	@CrossOrigin
 	public ResponseEntity<List<LocalDateTime>> getAvailbleTimingOfDoctor(@RequestParam String key, @RequestBody Doctor doctor) throws IOException, TimeDateException, LoginException, DoctorException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
