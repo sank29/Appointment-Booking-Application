@@ -15,7 +15,7 @@ A rest api using Spring Boot that enables users to search and book appointments 
 - Spring Validation
 - MySQL
 - Lambok
-- Swagger Ui
+- Swagger Ui.
 
 ## Modules
 - Login Module
