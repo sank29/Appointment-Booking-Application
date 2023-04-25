@@ -82,7 +82,7 @@ public class Doctor {
 	@JsonIgnore
 	private List<Review> listOfReviews = new ArrayList<>();
 	
-	
+	private String doctorImg;
 }
 
 
