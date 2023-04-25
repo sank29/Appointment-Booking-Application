@@ -45,7 +45,7 @@ public class Appointment {
 	private Patient patient;
 	
 	
-	// Appointement default time will be 15 mins from appoaintment start time.
+	// Appointement default time will be 60 mins from appoaintment start time.
 	
 
 	private LocalDateTime appointmentDateAndTime;

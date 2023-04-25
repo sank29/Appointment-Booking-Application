@@ -15,6 +15,7 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
@@ -402,15 +403,15 @@ public class PatientServiceImpl implements PatientService, Runnable {
 	@Override
 	public List<Appointment> getAllAppointmenPatientWise(String key) throws AppointmentException, PatientException {
 		
-		
-		
 		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		System.out.println("******"+ currentPatientSession.getUserId() );
 		
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
 		
+		System.out.println("******");
+		
 		if(patient.get() != null) {
-			
-			System.out.println(patient);
 			
 			List<Appointment> listOfAppointments = patient.get().getListOfAppointments();
 			
@@ -458,6 +459,17 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					LocalDateTime oldTime = registerAppoinment.get().getAppointmentDateAndTime();
 					
 					if(!newTime.isEqual(oldTime)) {
+						
+						LocalDateTime presentTime = LocalDateTime.now();
+						
+						// it will going to check patient is updating appointment correctly or not. Patient is changing appointment
+						// when appointment time is left if yes then appointment will not be update at that condition.
+						
+						if(oldTime.isBefore(presentTime) && !newTime.isAfter(presentTime)) {
+							
+							throw new AppointmentException("You can't update the appointment at this time. Your appointment date time left.");
+						
+						}
 						
 						getAppointmentDates(registerDoctor.get().getAppointmentFromTime(),registerDoctor.get().getAppointmentToTime());
 						

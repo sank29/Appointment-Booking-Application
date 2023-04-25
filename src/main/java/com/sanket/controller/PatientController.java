@@ -132,11 +132,12 @@ public class PatientController {
 	}
 	
 	@GetMapping("/allAppointment")
+	@CrossOrigin
 	public ResponseEntity<List<Appointment>> getAllAppointmenPatientWise(@RequestParam String key) throws AppointmentException, PatientException, LoginException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
 			
-			List<Appointment> listOfAppointments = patientService.getAllAppointmenPatientWise(key);
+			List<Appointment> listOfAppointments = patientService.getAllAppointmenPatientWise(key); 
 			
 			return new ResponseEntity<List<Appointment>>(listOfAppointments, HttpStatus.ACCEPTED);
 			
@@ -150,6 +151,7 @@ public class PatientController {
 	}
 	
 	@PutMapping("/updateAppointment")
+	@CrossOrigin
 	public ResponseEntity<Appointment> updateAppointment(@RequestParam String key, @RequestBody Appointment newAppointment) throws LoginException, AppointmentException, PatientException, DoctorException, IOException, TimeDateException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
