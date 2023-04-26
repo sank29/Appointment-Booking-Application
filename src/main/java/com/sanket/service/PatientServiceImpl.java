@@ -847,7 +847,75 @@ public class PatientServiceImpl implements PatientService, Runnable {
 			throw new PatientException("Patient not found");
 		}
 	}
+
+	@Override
+	public Review getReviewOfDoctorByPatient(String key, Review review) throws ReviewException, PatientException, DoctorException, AppointmentException {
+		
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		Optional<Patient> registerPatient = patientDao.findById(currentPatientSession.getUserId());
+		
+		if(registerPatient.isPresent()) {
+			
+			
+			Optional<Doctor> registerDoctor = doctorDao.findById(review.getDoctor().getDoctorId()); 
+			
+			if(registerDoctor.isEmpty()) {
+				
+				throw new DoctorException("No doctor found with this id " + review.getDoctor().getDoctorId());
+				
+			}
+		
+			
+			
+			
+			Optional<Appointment> registerAppointment = appointmentDao.findById(review.getAppointment().getAppointmentId());
+			
+			if(registerAppointment.isEmpty()) {
+				
+				throw new AppointmentException("No appointment found with this id");
+				
+			}
+			
+			Review review2 = registerAppointment.get().getReview();
+			
+			if(review2 != null) {
+				return review2;
+			}else {
+				throw new ReviewException("No review found");
+			}
+			
+			
+			
+			
+			
+		}else {
+			
+			throw new PatientException("Patient not found");
+		}
+	}
+
+	@Override
+	public Review updateReview(String key, Review review) throws ReviewException {
+		
+		Optional<Review> registerReview = reviewDao.findById(review.getReviewId());
+		
+		if(registerReview.isPresent()) {
+			
+			return reviewDao.save(review);
+			
+		}else {
+			throw new ReviewException("No reivew found with this id " + review.getReviewId());
+		}
+		
+		
+		
+	}
 	
 }
+
+
+
+
 
 
