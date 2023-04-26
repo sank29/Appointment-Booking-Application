@@ -223,11 +223,49 @@ public class PatientController {
 	}
 	
 	@PostMapping("/review")
+	@CrossOrigin
 	public ResponseEntity<Review> makeReviewToDoctorAppointment(@RequestParam String key, @RequestBody Review review) throws LoginException, AppointmentException, DoctorException, ReviewException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
 			
 			Review returnReiew = patientService.makeReviewToDoctorAppointment(key, review);  
+			
+			return new ResponseEntity<Review>(returnReiew, HttpStatus.ACCEPTED);
+			
+			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+	}
+	
+	@PostMapping("/getReview")
+	@CrossOrigin
+	public ResponseEntity<Review> getSpecificReviewOfDoctorByPatient(@RequestParam String key, @RequestBody Review review) throws LoginException, AppointmentException, DoctorException, ReviewException, PatientException{
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			Review returnReiew = patientService.getReviewOfDoctorByPatient(key, review);  
+			
+			return new ResponseEntity<Review>(returnReiew, HttpStatus.ACCEPTED);
+			
+			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+		
+	}
+	
+	@PutMapping("/updateReview")
+	@CrossOrigin
+	public ResponseEntity<Review> updateReview(@RequestParam String key, @RequestBody Review review) throws LoginException, ReviewException, PatientException, DoctorException, AppointmentException{
+		
+		System.out.println(review);
+		if(loginService.checkUserLoginOrNot(key)) { 
+			
+			Review returnReiew = patientService.updateReview(key, review);  
 			
 			return new ResponseEntity<Review>(returnReiew, HttpStatus.ACCEPTED);
 			
