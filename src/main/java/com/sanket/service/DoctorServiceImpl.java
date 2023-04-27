@@ -16,10 +16,12 @@ import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Patient;
+import com.sanket.entity.Review;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
+import com.sanket.exception.ReviewException;
 import com.sanket.exception.TimeDateException;
 import com.sanket.repository.DoctorDao;
 import com.sanket.repository.SessionDao;
@@ -265,6 +267,44 @@ public class DoctorServiceImpl implements DoctorService{
 		}
 		
 		
+	}
+
+	@Override
+	public Review getReviewOfParticularAppointment(String key, Appointment appointment) throws PatientException, ReviewException {
+		
+		CurrentSession currentDoctor = sessionDao.findByUuid(key);
+		
+		Optional<Doctor> registerDoctor = doctorDao.findById(currentDoctor.getUserId());
+		
+		System.out.println(appointment);
+		
+		if(registerDoctor.isPresent()) {
+			
+			List<Review> listOfReview = registerDoctor.get().getListOfReviews();
+			
+			if(!listOfReview.isEmpty()) {
+				
+				for(Review eachReview: listOfReview) {
+					
+					System.out.println("***************" + eachReview.getAppointment().getAppointmentId() + " " + appointment.getAppointmentId());
+					
+					if(eachReview.getAppointment().getAppointmentId() == appointment.getAppointmentId()) {
+						
+						return eachReview;
+					}
+				}
+				
+				throw new ReviewException("No review found");
+				
+			}else {
+				
+				throw new ReviewException("No review found with this doctor");
+				
+			}
+		}else {
+			
+			throw new PatientException("Doctor not present by this uuid " + key);
+		}
 	}
 
 }
