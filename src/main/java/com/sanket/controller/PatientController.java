@@ -206,6 +206,7 @@ public class PatientController {
 	}
 	
 	@DeleteMapping("/appointment")
+	@CrossOrigin
 	public ResponseEntity<Appointment> deleteAppointment(@RequestParam String key, @RequestBody Appointment appointment) throws AppointmentException, DoctorException, Exception{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
