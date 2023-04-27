@@ -298,8 +298,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 				
 				for(String str : myTimeDate.keySet()) {
 					
-					System.out.println(myTimeDate.get(str) +  " ** " + appointment.getAppointmentDateAndTime()); 
-					
 					if(myTimeDate.get(str).isEqual(appointment.getAppointmentDateAndTime())) {
 						
 						flag2 = true;
@@ -321,8 +319,8 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					
 					////////////////////////////////
 					
-					emailBody.setEmailBody("Dear Sir/Ma'am, \n You have booked appointment to the " + registerAppointment.getDoctor().getName() +
-							". Please make sure to join on time. If you want to call a doctor please contact to " + registerAppointment.getDoctor().getMobileNo()+"\n"
+					emailBody.setEmailBody("Dear Sir/Ma'am, \n You have booked an appointment with " + registerAppointment.getDoctor().getName() +
+							". Please make sure to join on time. If you want to call a doctor please contact " + registerAppointment.getDoctor().getMobileNo()+"\n"
 							
 							+"\n"
 							+"Appointment Id: " + registerAppointment.getAppointmentId()+"\n"
@@ -405,11 +403,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		
 		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
 		
-		System.out.println("******"+ currentPatientSession.getUserId() );
-		
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
-		
-		System.out.println("******");
 		
 		if(patient.get() != null) {
 			
@@ -494,8 +488,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 						
 						for(String str : myTimeDate.keySet()) {
 							
-							System.out.println(myTimeDate.get(str) +  " ** " + newAppointment.getAppointmentDateAndTime()); 
-							
 							if(myTimeDate.get(str).isEqual(newAppointment.getAppointmentDateAndTime())) {
 								
 								flag2 = true;
@@ -503,7 +495,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 							}
 						}
 						
-						System.out.println("******" + myTimeDate);
 						
 						Appointment returnAppointment = null;
 						
@@ -628,8 +619,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 						
 						// sending mail to patient for successfully canceling booking of appointment 
 						
-						emailBody.setEmailBody( "Dear Sir/Ma'am, \n You have cancel appointment to the " + registerAppointment.get().getDoctor().getName() +
-								". Please make sure to join on time. If you want to call a doctor please contact to " + registerAppointment.get().getDoctor().getMobileNo()+"\n"
+						emailBody.setEmailBody( "Dear Sir/Ma'am, \n You have canceled an appointment with " + registerAppointment.get().getDoctor().getName() 
 								
 								+"\n"
 								+"Appointment Id: " + registerAppointment.get().getAppointmentId()+"\n"
@@ -696,7 +686,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 			
 			// sending mail to patient for successfully booking of appointment 
 			
-			System.out.println("*********" + savedAppointment.getPatient().getEmail());
 			
 			emailSenderService.sendAppointmentBookingMail(savedAppointment.getPatient().getEmail(), emailBody);
 			

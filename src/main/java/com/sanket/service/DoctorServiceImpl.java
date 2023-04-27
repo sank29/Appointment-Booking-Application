@@ -231,8 +231,6 @@ public class DoctorServiceImpl implements DoctorService{
 		 
 		 String encodedPassword = bCryptPasswordEncoder.encode("1234");
 		 
-		 System.out.println(bCryptPasswordEncoder.matches("Sanket", encodedPassword)); 
-		 
 	}
 
 	@Override
@@ -276,8 +274,6 @@ public class DoctorServiceImpl implements DoctorService{
 		
 		Optional<Doctor> registerDoctor = doctorDao.findById(currentDoctor.getUserId());
 		
-		System.out.println(appointment);
-		
 		if(registerDoctor.isPresent()) {
 			
 			List<Review> listOfReview = registerDoctor.get().getListOfReviews();
@@ -285,8 +281,6 @@ public class DoctorServiceImpl implements DoctorService{
 			if(!listOfReview.isEmpty()) {
 				
 				for(Review eachReview: listOfReview) {
-					
-					System.out.println("***************" + eachReview.getAppointment().getAppointmentId() + " " + appointment.getAppointmentId());
 					
 					if(eachReview.getAppointment().getAppointmentId() == appointment.getAppointmentId()) {
 						
