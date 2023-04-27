@@ -40,11 +40,12 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 		
 		Optional<CurrentSession> validCustomerSessionOpt = sessionDao.findById(existingDoctor.getDoctorId());
 		
-		if(validCustomerSessionOpt.isPresent()) {
-			
-			throw new LoginException("Doctor already login");
-			
-		}
+		// please do uncomment this code while using this application in postman
+//		if(validCustomerSessionOpt.isPresent()) {
+//			
+//			throw new LoginException("Doctor already login");
+//			
+//		}
 		
 		if(PatientServiceImpl.bCryptPasswordEncoder.matches(loginDTO.getPassword(), existingDoctor.getPassword())) {
 		

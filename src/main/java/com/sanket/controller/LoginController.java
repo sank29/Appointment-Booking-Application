@@ -68,6 +68,7 @@ public class LoginController {
 	}
 	
 	@PostMapping("/logout")
+	@CrossOrigin
 	public String logoutPatient(@RequestParam(required = false) String key) throws LoginException {
 		
 		return patientAndAdminLoginService.logoutFromAccount(key);
