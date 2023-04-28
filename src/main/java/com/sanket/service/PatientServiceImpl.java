@@ -444,6 +444,8 @@ public class PatientServiceImpl implements PatientService, Runnable {
 				Doctor newDoctor = newAppointment.getDoctor();
 				Doctor oldDoctor = registerAppoinment.get().getDoctor();
 				
+				Boolean patientChangeDoctorOrNot = newDoctor.getDoctorId() == oldDoctor.getDoctorId() ? true : false;
+				
 				if(!registerDoctor.isEmpty()) {
 					
 					// patient did not change the doctor now check patient may have change appointment time then check this doctor is 
@@ -452,7 +454,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					LocalDateTime newTime = newAppointment.getAppointmentDateAndTime();
 					LocalDateTime oldTime = registerAppoinment.get().getAppointmentDateAndTime();
 					
-					if(!newTime.isEqual(oldTime)) {
+					if(!newTime.isEqual(oldTime) || !patientChangeDoctorOrNot) {
 						
 						LocalDateTime presentTime = LocalDateTime.now();
 						
@@ -475,8 +477,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 						
 						for(Appointment eachAppointment: listOfAppointment) {
 							
-							
-							
 							if(eachAppointment.getAppointmentDateAndTime().isEqual(newAppointment.getAppointmentDateAndTime())) {
 								
 								flag1 = true;
@@ -496,35 +496,21 @@ public class PatientServiceImpl implements PatientService, Runnable {
 						}
 						
 						
-						Appointment returnAppointment = null;
-						
-						
 						
 						if(!flag1 && flag2) {
 							
-							returnAppointment = appointmentDao.save(newAppointment);
 							
-							returnAppointment.setPatient(patient.get());
+							registerAppoinment.get().getDoctor().getListOfAppointments().remove(newAppointment);
 							
-							returnAppointment.setDoctor(registerDoctor.get());
+							appointmentDao.save(registerAppoinment.get());
 							
-							// setting up the new appointment in patient
+							newAppointment.setDoctor(registerDoctor.get());
 							
-							patient.get().getListOfAppointments().remove(registerAppoinment.get());
-							
-							patient.get().getListOfAppointments().add(returnAppointment);
-							
-							patientDao.save(patient.get());
-							
-							// setting up the new appointment in doctor
-							
-							registerDoctor.get().getListOfAppointments().remove(registerAppoinment.get());
-							
-							registerDoctor.get().getListOfAppointments().add(returnAppointment);
+							registerDoctor.get().getListOfAppointments().add(newAppointment);
 							
 							doctorDao.save(registerDoctor.get());
 							
-							return returnAppointment;
+							return newAppointment;
 							
 							
 						}else {
@@ -536,7 +522,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 						
 					}else {
 						
-						throw new AppointmentException("Please update the appointment. You did not update anythings");
+						throw new AppointmentException("Please update the appointment. You did not update anythings.");
 					}
 					
 					
@@ -612,6 +598,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					Boolean doctorListFlag = registerDoctor.get().getListOfAppointments().remove(registerAppointment.get());
 					
 					Boolean patientListFlag = registerPatient.get().getListOfAppointments().remove(registerAppointment.get());
+					
 					
 					if(doctorListFlag && patientListFlag) {
 						
