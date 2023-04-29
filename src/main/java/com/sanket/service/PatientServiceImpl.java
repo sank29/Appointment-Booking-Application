@@ -21,11 +21,13 @@ import com.sanket.entity.Appointment;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.EmailBody;
+import com.sanket.entity.ForgetPassword;
 import com.sanket.entity.Patient;
 import com.sanket.entity.Review;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
+import com.sanket.exception.PasswordException;
 import com.sanket.exception.PatientException;
 import com.sanket.exception.ReviewException;
 import com.sanket.exception.TimeDateException;
@@ -165,6 +167,8 @@ public class PatientServiceImpl implements PatientService, Runnable {
 	public static void getAppointmentDates(Integer from, Integer to) throws IOException, TimeDateException{
 		
 		// empty the myTimeDate firstly before putting the new values
+		
+		System.out.println();
 		
 		myTimeDate.clear();
 		
@@ -886,6 +890,29 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		
 		
 		
+	}
+
+	@Override
+	public Patient forgetPassword(String key, ForgetPassword forgetPassword) throws PasswordException {
+		
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		Optional<Patient> registerPatient = patientDao.findById(currentPatientSession.getUserId());
+		
+		Boolean isPasswordIsMatchingOrNot = bCryptPasswordEncoder.matches(forgetPassword.getOldPassword(), registerPatient.get().getPassword());
+		
+		if(isPasswordIsMatchingOrNot) {	
+			
+			registerPatient.get().setPassword(bCryptPasswordEncoder.encode(forgetPassword.getNewPassword()));
+			
+			return patientDao.save(registerPatient.get());
+		
+			
+		}else {
+			
+			throw new PasswordException("Please enter valid old password.");
+			
+		}
 	}
 	
 }

@@ -31,7 +31,6 @@ import lombok.ToString;
 public class Patient {
 	
 	@Id
-	
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
     generator = "id_table"
 			)

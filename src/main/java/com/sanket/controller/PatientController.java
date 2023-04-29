@@ -21,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sanket.entity.Appointment;
 import com.sanket.entity.Doctor;
+import com.sanket.entity.ForgetPassword;
 import com.sanket.entity.Patient;
 import com.sanket.entity.Review;
 import com.sanket.exception.AppointmentException;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
+import com.sanket.exception.PasswordException;
 import com.sanket.exception.PatientException;
 import com.sanket.exception.ReviewException;
 import com.sanket.exception.TimeDateException;
@@ -290,6 +292,39 @@ public class PatientController {
 			return new ResponseEntity<Float>(rating, HttpStatus.ACCEPTED);
 			
 			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+	}
+	
+	@PutMapping("/forgetPassword")
+	@CrossOrigin
+	public ResponseEntity<Patient> forgetPassword(@RequestParam String key, @RequestBody ForgetPassword forgetPassword) throws LoginException, PasswordException {
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			if(forgetPassword.getNewPassword().equals(forgetPassword.getConfirmNewPassword())) {
+				
+				System.out.println(forgetPassword.getNewPassword().equals(forgetPassword.getConfirmNewPassword()));
+				
+				if(forgetPassword.getOldPassword().equals(forgetPassword.getNewPassword())) {
+					
+					throw new PasswordException("Please enter new password.");
+					
+				}
+				
+				Patient finalResult = patientService.forgetPassword(key, forgetPassword);  
+				
+				return new ResponseEntity<Patient>(finalResult, HttpStatus.ACCEPTED); 
+				
+			}else {
+				
+				throw new PasswordException("Please match both password. New password and confirm new password");
+				
+			}
+			
 		}else {
 			
 			throw new LoginException("Invalid key or please login first");
