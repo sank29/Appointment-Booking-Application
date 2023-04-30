@@ -55,4 +55,6 @@ public interface PatientService {
 	public Review getReviewOfDoctorByPatient(String key,Review review) throws ReviewException, PatientException, DoctorException, AppointmentException;
 
 	public Patient forgetPassword(String key, ForgetPassword forgetPassword) throws PasswordException;
+
+	public Review deleteReview(String key, Review review) throws ReviewException; 
 }

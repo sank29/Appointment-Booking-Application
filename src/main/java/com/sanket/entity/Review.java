@@ -1,6 +1,8 @@
 package com.sanket.entity;
 
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,6 +40,25 @@ public class Review {
 	private String reviewContent;
 	
 	private float rating;
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(reviewId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Review other = (Review) obj;
+		return Objects.equals(reviewId, other.reviewId);
+	}
+	
+	
 
 }
 
