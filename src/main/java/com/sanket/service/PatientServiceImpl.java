@@ -824,7 +824,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 			
 		}else {
 			
-			throw new PatientException("Patient not found");
+			throw new PatientException("Patient not found.");
 		}
 	}
 
