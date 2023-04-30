@@ -332,6 +332,26 @@ public class PatientController {
 		}
 	}
 	
+	
+	@DeleteMapping("/review")
+	public ResponseEntity<Review> deleteReivew(@RequestParam String key, @RequestBody Review review) throws LoginException, ReviewException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			Review deletedReview = patientService.deleteReview(key, review);  
+			
+			
+			return new ResponseEntity<Review>(deletedReview, HttpStatus.ACCEPTED);
+			
+			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first");
+			
+		}
+		
+	}
+	
 
 }
 

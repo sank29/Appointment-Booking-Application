@@ -81,7 +81,7 @@ public class Doctor {
 	
 	private String type;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Review> listOfReviews = new ArrayList<>();
 	

@@ -837,7 +837,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		
 		if(registerPatient.isPresent()) {
 			
-			
 			Optional<Doctor> registerDoctor = doctorDao.findById(review.getDoctor().getDoctorId()); 
 			
 			if(registerDoctor.isEmpty()) {
@@ -846,9 +845,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 				
 			}
 		
-			
-			
-			
 			Optional<Appointment> registerAppointment = appointmentDao.findById(review.getAppointment().getAppointmentId());
 			
 			if(registerAppointment.isEmpty()) {
@@ -860,9 +856,13 @@ public class PatientServiceImpl implements PatientService, Runnable {
 			Review review2 = registerAppointment.get().getReview();
 			
 			if(review2 != null) {
+				
 				return review2;
+				
 			}else {
+				
 				throw new ReviewException("No review found");
+				
 			}
 			
 			
@@ -911,6 +911,64 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		}else {
 			
 			throw new PasswordException("Please enter valid old password.");
+			
+		}
+	}
+
+	@Override
+	public Review deleteReview(String key, Review review) throws ReviewException {
+		
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		Optional<Patient> registerPatient = patientDao.findById(currentPatientSession.getUserId());
+		
+		List<Review> listOfReview = registerPatient.get().getListReviews();
+		
+		Boolean cheakThisReviewIsPresentInPatientReivewList = true;
+		
+		for(Review eachReview: listOfReview) {
+			
+			if(eachReview.getReviewId() == review.getReviewId()) {
+				
+				System.out.println(eachReview.getReviewId() + " " + review.getReviewId());
+				
+				cheakThisReviewIsPresentInPatientReivewList = true;
+				
+				break;
+			}
+		}
+		
+		Optional<Review> registerReivew = reviewDao.findById(review.getReviewId());
+		
+		
+		
+		if(registerReivew.isPresent() && cheakThisReviewIsPresentInPatientReivewList) {
+			
+			// remove from doctor
+			
+			Doctor registerDoctor = registerReivew.get().getDoctor();
+			
+			registerDoctor.getListOfReviews().remove(registerReivew);
+			
+			doctorDao.save(registerDoctor);
+			
+			// remove from patient
+			
+			registerPatient.get().getListReviews().remove(registerReivew);
+			
+			patientDao.save(registerPatient.get());
+			
+			List<Review>listOfReivew = reviewDao.findAll();
+			
+			listOfReivew.remove(registerReivew.get());
+			
+			reviewDao.saveAll(listOfReivew);
+			 
+			return registerReivew.get();
+			
+		}else {
+			
+			throw new ReviewException("No review found with this id " + review.getReviewId());
 			
 		}
 	}
