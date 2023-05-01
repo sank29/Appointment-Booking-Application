@@ -60,7 +60,7 @@ public class Patient {
 	@JsonIgnore
 	List<Appointment> listOfAppointments = new ArrayList<>();
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
 	List<Review> listReviews = new ArrayList<>();
 	

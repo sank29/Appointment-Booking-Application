@@ -924,13 +924,15 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		
 		List<Review> listOfReview = registerPatient.get().getListReviews();
 		
-		Boolean cheakThisReviewIsPresentInPatientReivewList = true;
+		Boolean cheakThisReviewIsPresentInPatientReivewList = false;
 		
 		for(Review eachReview: listOfReview) {
 			
-			if(eachReview.getReviewId() == review.getReviewId()) {
-				
-				System.out.println(eachReview.getReviewId() + " " + review.getReviewId());
+			System.out.println(eachReview.getReviewId() + " " + review.getReviewId());
+			
+			int result = eachReview.getReviewId().compareTo(review.getReviewId());
+			
+			if(result == 0) {
 				
 				cheakThisReviewIsPresentInPatientReivewList = true;
 				
@@ -948,21 +950,25 @@ public class PatientServiceImpl implements PatientService, Runnable {
 			
 			Doctor registerDoctor = registerReivew.get().getDoctor();
 			
-			registerDoctor.getListOfReviews().remove(registerReivew);
+			registerDoctor.getListOfReviews().remove(registerReivew.get());
 			
 			doctorDao.save(registerDoctor);
 			
 			// remove from patient
 			
-			registerPatient.get().getListReviews().remove(registerReivew);
+			registerPatient.get().getListReviews().remove(registerReivew.get());
 			
 			patientDao.save(registerPatient.get());
 			
-			List<Review>listOfReivew = reviewDao.findAll();
+			// remove from appointment
 			
-			listOfReivew.remove(registerReivew.get());
+			Appointment registerAppointment = registerReivew.get().getAppointment();
 			
-			reviewDao.saveAll(listOfReivew);
+			registerAppointment.setReview(null);
+			
+			appointmentDao.save(registerAppointment);
+			
+			reviewDao.delete(registerReivew.get());
 			 
 			return registerReivew.get();
 			
