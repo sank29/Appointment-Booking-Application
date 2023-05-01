@@ -334,6 +334,7 @@ public class PatientController {
 	
 	
 	@DeleteMapping("/review")
+	@CrossOrigin
 	public ResponseEntity<Review> deleteReivew(@RequestParam String key, @RequestBody Review review) throws LoginException, ReviewException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
