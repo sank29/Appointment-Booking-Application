@@ -6,10 +6,10 @@ import com.sanket.exception.LoginException;
 
 public interface DoctorLoginService {
 	
-	public LoginUUIDKey logIntoAccount(LoginDTO loginDTO) throws LoginException;
+	LoginUUIDKey logIntoAccount(LoginDTO loginDTO) throws LoginException;
 	
-	public String logoutFromAccount(String key) throws LoginException;
+	String logoutFromAccount(String key) throws LoginException;
 	
-	public Boolean checkUserLoginOrNot(String key) throws LoginException;
+	Boolean checkUserLoginOrNot(String key) throws LoginException;
 
 }
