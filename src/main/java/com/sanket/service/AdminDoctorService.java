@@ -8,6 +8,8 @@ import com.sanket.exception.DoctorException;
 public interface AdminDoctorService {
 	
 	
-	public Doctor registerDoctor(Doctor doctor) throws DoctorException;
+	Doctor registerDoctor(Doctor doctor) throws DoctorException;
+
+	Doctor deleteDoctor(Doctor doctor) throws DoctorException; 
 
 }

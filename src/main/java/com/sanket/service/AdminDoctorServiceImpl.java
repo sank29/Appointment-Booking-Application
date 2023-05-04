@@ -39,6 +39,24 @@ public class AdminDoctorServiceImpl implements AdminDoctorService {
 		
 	}
 
+	@Override
+	public Doctor deleteDoctor(Doctor doctor) throws DoctorException {
+		
+		Optional<Doctor> registerDoctor = doctorDao.findById(doctor.getDoctorId());
+		
+		if(registerDoctor.isPresent()) {
+			
+			doctorDao.delete(registerDoctor.get());
+			
+			return registerDoctor.get();
+			
+		}else {
+			
+			throw new DoctorException("Doctor not present with this id " + doctor.getDoctorId());
+			
+		}
+	}
+
 
 
 }

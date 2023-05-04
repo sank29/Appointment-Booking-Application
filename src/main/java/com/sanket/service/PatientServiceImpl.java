@@ -74,6 +74,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 	@Autowired
 	ReviewDao reviewDao;
 	
+	
 	public PatientServiceImpl(Appointment appointment, EmailSenderService emailSenderService, EmailBody emailBody) {
 		
 		this.savedAppointment = appointment;
@@ -81,6 +82,7 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		this.emailBody = emailBody;
 	
 	}
+	
 
 	@Override
 	public Patient createPatient(Patient patient) throws PatientException {

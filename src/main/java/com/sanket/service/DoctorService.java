@@ -23,22 +23,22 @@ import com.sanket.exception.TimeDateException;
 
 public interface DoctorService {
 	
-	public List<Doctor> getAllDoctorsRegisterFromDatabase() throws DoctorException;
+	List<Doctor> getAllDoctorsRegisterFromDatabase() throws DoctorException;
 	
-	public Doctor getDoctorByUuid(String uuid) throws PatientException;
+	Doctor getDoctorByUuid(String uuid) throws PatientException;
 	
-	public CurrentSession getCurrentUserByUuid(String uuid) throws LoginException;
+	CurrentSession getCurrentUserByUuid(String uuid) throws LoginException;
 	
-	public List<LocalDateTime> getDoctorAvailableTimingForBooking(String key, Doctor doctor) throws IOException, TimeDateException, DoctorException;
+	List<LocalDateTime> getDoctorAvailableTimingForBooking(String key, Doctor doctor) throws IOException, TimeDateException, DoctorException;
 	
-	public List<Appointment> getUpcommingDoctorAppointment(Doctor doctor) throws AppointmentException;
+	List<Appointment> getUpcommingDoctorAppointment(Doctor doctor) throws AppointmentException;
 	
-	public List<Appointment> getPastDoctorAppointment(Doctor doctor) throws AppointmentException;
+	List<Appointment> getPastDoctorAppointment(Doctor doctor) throws AppointmentException;
 	
-	public List<Appointment> getAllAppointments(Doctor registerDoctor) throws DoctorException;
+	List<Appointment> getAllAppointments(Doctor registerDoctor) throws DoctorException;
 	
-	public Doctor getDoctorDetails(String key) throws PatientException;
+	Doctor getDoctorDetails(String key) throws PatientException;
 
-	public Review getReviewOfParticularAppointment(String key, Appointment appointment) throws PatientException, ReviewException;
+	Review getReviewOfParticularAppointment(String key, Appointment appointment) throws PatientException, ReviewException;
 	
 }

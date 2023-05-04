@@ -6,7 +6,7 @@ import jakarta.mail.MessagingException;
 
 public interface EmailSenderService {
 	
-	public Boolean sendAppointmentBookingMail(String toEmail, EmailBody emailBody) throws MessagingException;
+	Boolean sendAppointmentBookingMail(String toEmail, EmailBody emailBody) throws MessagingException;
 	
 
 }
