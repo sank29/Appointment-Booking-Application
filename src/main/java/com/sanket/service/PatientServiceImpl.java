@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -549,9 +550,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 			throw new PatientException("Please enter valid patient details");
 		}
 		
-		
-		
-		
 	}
 
 	@Override
@@ -561,11 +559,14 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		
 		if(!listOfDoctors.isEmpty()) {
 			
+			listOfDoctors = listOfDoctors.stream().filter(eachDoctor -> eachDoctor.getValidDoctor() == true).collect(Collectors.toList()); 
+			
 			return listOfDoctors;
 			
 		}else {
 			
 			throw new DoctorException("No doctors register. Please contact admin.");
+			
 		}
 		
 	}

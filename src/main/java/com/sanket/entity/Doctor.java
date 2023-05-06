@@ -86,6 +86,9 @@ public class Doctor {
 	private List<Review> listOfReviews = new ArrayList<>();
 	
 	private String doctorImg;
+	
+	private Boolean validDoctor = true;
+	
 }
 
 
