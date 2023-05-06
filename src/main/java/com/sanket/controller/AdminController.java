@@ -1,11 +1,14 @@
 package com.sanket.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -70,8 +73,9 @@ public class AdminController {
 		
 	}
 	
-	@DeleteMapping("/deleteDoctor")
-	public ResponseEntity<Doctor> deleteDoctor(@RequestParam String key, @RequestBody Doctor doctor) throws LoginException, DoctorException{ 
+	@DeleteMapping("/revokePermission")
+	@CrossOrigin
+	public ResponseEntity<Doctor> revokePermissionOfDoctor(@RequestParam String key, @RequestBody Doctor doctor) throws LoginException, DoctorException{ 
 		
 		if(patientAndAdminLoginService.checkUserLoginOrNot(key)) {
 			
@@ -83,7 +87,7 @@ public class AdminController {
 				
 			}
 			
-				Doctor deletedDoctor = adminDoctorService.deleteDoctor(doctor);
+				Doctor deletedDoctor = adminDoctorService.revokePermissionOfDoctor(doctor);
 				
 				return new ResponseEntity<Doctor>(deletedDoctor, HttpStatus.CREATED);
 				
@@ -93,6 +97,55 @@ public class AdminController {
 			
 			throw new LoginException("Please enter valid key.");
 		}
+	}
+	
+	@PostMapping("/grantPermission")
+	@CrossOrigin
+	public ResponseEntity<Doctor> grantPermissionOfDoctor(@RequestParam String key, @RequestBody Doctor doctor) throws LoginException, DoctorException{ 
+		
+		if(patientAndAdminLoginService.checkUserLoginOrNot(key)) {
+			
+			CurrentSession currentUserSession = patientService.getCurrentUserByUuid(key);
+			
+			if(!currentUserSession.getUserType().equals("admin")) { 
+				
+				throw new LoginException("Please login as admin");
+				
+			}
+			
+				Doctor deletedDoctor = adminDoctorService.grantPermissionOfDoctor(doctor);
+				
+				return new ResponseEntity<Doctor>(deletedDoctor, HttpStatus.CREATED);
+
+		}else {
+			
+			throw new LoginException("Please enter valid key.");
+		}
+	}
+	
+	@GetMapping("/getValidInValidDoctors")
+	@CrossOrigin
+	public ResponseEntity<List<Doctor>> getAllValidInValidDoctors(@RequestParam String key) throws LoginException, DoctorException{
+		
+		if(patientAndAdminLoginService.checkUserLoginOrNot(key)) {
+			
+			CurrentSession currentUserSession = patientService.getCurrentUserByUuid(key);
+			
+			if(!currentUserSession.getUserType().equals("admin")) { 
+				
+				throw new LoginException("Please login as admin");
+				
+			}
+			
+				List<Doctor> listOfValidInValidDoctors = adminDoctorService.getAllValidInValidDoctors(key);
+				
+				return new ResponseEntity<List<Doctor>>(listOfValidInValidDoctors, HttpStatus.CREATED);
+
+		}else {
+			
+			throw new LoginException("Please enter valid key.");
+		}
+		
 	}
 
 }

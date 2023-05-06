@@ -38,9 +38,11 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 		}
 		
 		
-		Optional<CurrentSession> validCustomerSessionOpt = sessionDao.findById(existingDoctor.getDoctorId());
 		
 		// please do uncomment this code while using this application in postman
+		
+//		Optional<CurrentSession> validCustomerSessionOpt = sessionDao.findById(existingDoctor.getDoctorId());
+		
 //		if(validCustomerSessionOpt.isPresent()) {
 //			
 //			throw new LoginException("Doctor already login");
@@ -48,6 +50,13 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 //		}
 		
 		if(PatientServiceImpl.bCryptPasswordEncoder.matches(loginDTO.getPassword(), existingDoctor.getPassword())) {
+			
+			// check doctor have permission or not 
+			
+			if(existingDoctor.getValidDoctor() == false) {
+				
+				throw new LoginException("You don't have permission to login. Please contact Admin for permission.");
+			}
 		
 //		if(existingDoctor.getPassword().equals(loginDTO.getPassword())) {
 			
