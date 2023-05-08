@@ -64,6 +64,10 @@ public class Patient {
 	@JsonIgnore
 	List<Review> listReviews = new ArrayList<>();
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JsonIgnore
+	List<Message> listOfMessage = new ArrayList<>();
+	
 
 }
 
