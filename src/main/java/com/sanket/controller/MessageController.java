@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sanket.entity.CurrentSession;
 import com.sanket.entity.Doctor;
 import com.sanket.entity.Message;
+import com.sanket.entity.Patient;
 import com.sanket.entity.Review;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
@@ -114,6 +115,42 @@ public class MessageController {
 			
 		}
 		
+		
+	}
+	
+	@PostMapping("/doctorMessage")
+	@CrossOrigin
+	public ResponseEntity<List<Message>> getMessageOfDoctorParticularPatient(@RequestParam String key, @RequestBody Patient patient) throws LoginException, DoctorException, PatientException{
+		
+		if(doctorLoginService.checkUserLoginOrNot(key)) { 
+			
+			CurrentSession currentUserSession = doctorService.getCurrentUserByUuid(key);
+			
+			Doctor registerDoctor = doctorService.getDoctorByUuid(key);
+			
+			if(!currentUserSession.getUserType().equals("doctor")) { 
+				
+				throw new LoginException("Please login as doctor");
+				
+			}
+			
+			if(registerDoctor != null) {
+				
+				List<Message> listOfMessage = messageService.getMessageOfDoctorParticularPatient(key, patient);
+				
+				return new ResponseEntity<List<Message>>(listOfMessage, HttpStatus.OK);
+				
+			}else {
+				
+				throw new DoctorException("Please enter valid doctor details");
+				
+			}
+		
+		}else {
+			
+			throw new LoginException("Please enter valid key");
+			
+		}
 		
 	}
 

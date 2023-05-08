@@ -40,5 +40,7 @@ public interface DoctorService {
 	Doctor getDoctorDetails(String key) throws PatientException;
 
 	Review getReviewOfParticularAppointment(String key, Appointment appointment) throws PatientException, ReviewException;
+
+	List<Patient> getListOfPatient();
 	
 }
