@@ -89,6 +89,10 @@ public class Doctor {
 	
 	private Boolean validDoctor = true;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JsonIgnore
+	List<Message> listOfMessage = new ArrayList<>();
+	
 }
 
 
