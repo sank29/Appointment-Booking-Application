@@ -1,7 +1,9 @@
 package com.sanket.service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
+import java.util.Optional;import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -146,4 +148,62 @@ public class MessageServiceImpl implements MessageService {
 		}
 	}
 
+	@Override
+	public List<Message> getMessageOfPatientParticularDoctor(String key, Doctor doctor) throws DoctorException, PatientException {
+		
+		CurrentSession currentPatientSession = sessionDao.findByUuid(key); 
+		
+		Optional<Patient> registerPatient = patientDao.findById(currentPatientSession.getUserId());
+		
+		// check doctor is present in database or not
+		
+		Optional<Doctor> registerDoctor = doctorDao.findById(doctor.getDoctorId());
+		
+		if(registerPatient.isPresent()) {
+			
+			if(registerDoctor.isPresent()) {
+				
+				List<Message> listOfAllMessage = registerPatient.get().getListOfMessage();
+				
+				List<Message> getParticularDoctorMessage = listOfAllMessage.stream().filter(eachMessage ->{
+					
+					int result = eachMessage.getDoctor().getDoctorId().compareTo(doctor.getDoctorId());
+					
+					if(result == 0) {
+						
+						return true;
+						
+					}else {
+						
+						return false;
+						
+					}
+					
+				} ).collect(Collectors.toList()); 
+				
+				return getParticularDoctorMessage;
+				
+			}else {
+				
+				throw new DoctorException("Doctor not found");
+			}
+			
+		}else {
+			
+			throw new PatientException("Patient not found");
+		}
+		
+		
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
