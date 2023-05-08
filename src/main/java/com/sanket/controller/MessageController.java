@@ -10,10 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sanket.entity.CurrentSession;
+import com.sanket.entity.Doctor;
 import com.sanket.entity.Message;
+import com.sanket.entity.Review;
 import com.sanket.exception.DoctorException;
 import com.sanket.exception.LoginException;
 import com.sanket.exception.PatientException;
+import com.sanket.service.DoctorLoginService;
+import com.sanket.service.DoctorService;
 import com.sanket.service.MessageService;
 import com.sanket.service.PatientAndAdminLoginService;
 
@@ -23,6 +28,12 @@ public class MessageController {
 	
 	@Autowired
 	PatientAndAdminLoginService loginService;
+	
+	@Autowired
+	DoctorLoginService doctorLoginService;
+	
+	@Autowired
+	DoctorService doctorService;
 	
 	@Autowired
 	MessageService messageService;
@@ -40,6 +51,42 @@ public class MessageController {
 		}else {
 			
 			throw new LoginException("Invalid key or please login first"); 
+			
+		}
+		
+		
+	}
+	
+	@PostMapping("/doctorToPatient")
+	public ResponseEntity<Message> sendMessageFromDoctorToPatient(@RequestParam String key, @RequestBody Message message) throws LoginException, PatientException, DoctorException{
+		
+		if(doctorLoginService.checkUserLoginOrNot(key)) { 
+			
+			CurrentSession currentUserSession = doctorService.getCurrentUserByUuid(key);
+			
+			Doctor registerDoctor = doctorService.getDoctorByUuid(key);
+			
+			if(!currentUserSession.getUserType().equals("doctor")) { 
+				
+				throw new LoginException("Please login as doctor");
+				
+			}
+			
+			if(registerDoctor != null) {
+				
+				Message sendMessage = messageService.sendMessageFromDoctorToPatient(key, message);
+				
+				return new ResponseEntity<Message>(sendMessage, HttpStatus.OK);
+				
+			}else {
+				
+				throw new DoctorException("Please enter valid doctor details");
+				
+			}
+		
+		}else {
+			
+			throw new LoginException("Please enter valid key");
 			
 		}
 		

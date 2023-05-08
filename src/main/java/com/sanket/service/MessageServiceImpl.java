@@ -66,11 +66,7 @@ public class MessageServiceImpl implements MessageService {
 			// set time and date
 			
 			message.setMessageTimeAndDate(LocalDateTime.now());
-			
 
-			
-			
-			
 //			// save message and return
 			
 			Message registerMessage = messageDao.save(message);
@@ -85,8 +81,6 @@ public class MessageServiceImpl implements MessageService {
 			registerPatient.get().getListOfMessage().add(registerMessage);
 			patientDao.save(registerPatient.get());
 			
-			System.out.println("****");
-			
 			return registerMessage;
 			
 			
@@ -95,6 +89,61 @@ public class MessageServiceImpl implements MessageService {
 			throw new PatientException("Please enter valid patient details");
 		}
 		
+	}
+
+	@Override
+	public Message sendMessageFromDoctorToPatient(String key, Message message) throws PatientException, DoctorException {
+		
+		CurrentSession currentDoctor = sessionDao.findByUuid(key);
+		
+		Optional<Doctor> registerDoctor = doctorDao.findById(currentDoctor.getUserId());
+		
+		Optional<Patient> registerPatient = patientDao.findById(message.getPatient().getPatientId());
+		
+		if(registerPatient.isEmpty()) {
+			
+			throw new DoctorException("Patient not found in database");
+			
+		}
+		
+		if(registerDoctor.isPresent()) {
+			
+			// set patient and doctor in message
+			
+			message.setPatient(registerPatient.get());
+			message.setDoctor(registerDoctor.get());
+			
+			// set sender and receiver id in message entity
+			
+			message.setSender(message.getDoctor().getDoctorId());
+			message.setReceiver(registerPatient.get().getPatientId());
+			
+			
+			// set time and date
+			
+			message.setMessageTimeAndDate(LocalDateTime.now());
+
+//			// save message and return
+			
+			Message registerMessage = messageDao.save(message);
+			
+			// set message in patinent and doctor
+			
+			registerDoctor.get().getListOfMessage().add(registerMessage);
+			doctorDao.save(registerDoctor.get());
+			
+			
+			
+			registerPatient.get().getListOfMessage().add(registerMessage);
+			patientDao.save(registerPatient.get());
+			
+			return registerMessage;
+			
+			
+		}else {
+			
+			throw new PatientException("Please enter valid doctor details");
+		}
 	}
 
 }

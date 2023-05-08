@@ -8,4 +8,6 @@ public interface MessageService {
 	
 	Message sendMessageFromPatientToDoctor(String key, Message message) throws PatientException, DoctorException;
 
+	Message sendMessageFromDoctorToPatient(String key, Message message) throws PatientException, DoctorException;
+
 }
