@@ -1,9 +1,13 @@
 package com.sanket.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +43,7 @@ public class MessageController {
 	MessageService messageService;
 	
 	@PostMapping("/patientToDoctor")
+	@CrossOrigin
 	public ResponseEntity<Message> sendMessageFromPatientToDoctor(@RequestParam String key, @RequestBody Message message) throws LoginException, PatientException, DoctorException{
 		
 		if(loginService.checkUserLoginOrNot(key)) {
@@ -57,7 +62,26 @@ public class MessageController {
 		
 	}
 	
+	@PostMapping("/patientMessage")
+	@CrossOrigin
+	public ResponseEntity<List<Message>> getMessageOfPatientParticularDoctor(@RequestParam String key, @RequestBody Doctor doctor) throws LoginException, DoctorException, PatientException{
+		
+		if(loginService.checkUserLoginOrNot(key)) {
+			
+			List<Message> listOfMessage = messageService.getMessageOfPatientParticularDoctor(key, doctor);
+			
+			return new ResponseEntity<List<Message>>(listOfMessage, HttpStatus.OK);
+			
+			 
+		}else {
+			
+			throw new LoginException("Invalid key or please login first"); 
+			
+		}
+	}
+	
 	@PostMapping("/doctorToPatient")
+	@CrossOrigin
 	public ResponseEntity<Message> sendMessageFromDoctorToPatient(@RequestParam String key, @RequestBody Message message) throws LoginException, PatientException, DoctorException{
 		
 		if(doctorLoginService.checkUserLoginOrNot(key)) { 
