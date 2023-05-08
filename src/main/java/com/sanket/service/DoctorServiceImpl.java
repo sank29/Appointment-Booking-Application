@@ -24,6 +24,7 @@ import com.sanket.exception.PatientException;
 import com.sanket.exception.ReviewException;
 import com.sanket.exception.TimeDateException;
 import com.sanket.repository.DoctorDao;
+import com.sanket.repository.PatientDao;
 import com.sanket.repository.SessionDao;
 
 @Service
@@ -34,6 +35,9 @@ public class DoctorServiceImpl implements DoctorService{
 	
 	@Autowired
 	SessionDao sessionDao;
+	
+	@Autowired
+	PatientDao patientDao;
 
 	@Override
 	public List<Doctor> getAllDoctorsRegisterFromDatabase() throws DoctorException {
@@ -299,6 +303,15 @@ public class DoctorServiceImpl implements DoctorService{
 			
 			throw new PatientException("Doctor not present by this uuid " + key);
 		}
+	}
+
+	@Override
+	public List<Patient> getListOfPatient() {
+		
+		List<Patient> listOfPatient = patientDao.findAll();
+		
+		return listOfPatient;
+		
 	}
 
 }

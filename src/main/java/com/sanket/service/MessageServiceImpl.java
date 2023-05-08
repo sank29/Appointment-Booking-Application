@@ -134,8 +134,6 @@ public class MessageServiceImpl implements MessageService {
 			registerDoctor.get().getListOfMessage().add(registerMessage);
 			doctorDao.save(registerDoctor.get());
 			
-			
-			
 			registerPatient.get().getListOfMessage().add(registerMessage);
 			patientDao.save(registerPatient.get());
 			
@@ -194,6 +192,50 @@ public class MessageServiceImpl implements MessageService {
 		}
 		
 		
+	}
+
+	@Override
+	public List<Message> getMessageOfDoctorParticularPatient(String key, Patient patient) throws DoctorException, PatientException {
+		
+		CurrentSession currentDoctor = sessionDao.findByUuid(key);
+		
+		Optional<Doctor> registerDoctor = doctorDao.findById(currentDoctor.getUserId());
+		
+		Optional<Patient> registerPatient = patientDao.findById(patient.getPatientId());
+		
+		if(registerDoctor.isPresent()) {
+			
+			if(registerPatient.isPresent()) {
+				
+				List<Message> listOfAllMessage = registerDoctor.get().getListOfMessage();
+				
+				List<Message> getParticularDoctorMessage = listOfAllMessage.stream().filter(eachMessage ->{
+					
+					int result = eachMessage.getPatient().getPatientId().compareTo(patient.getPatientId());
+					
+					if(result == 0) {
+						
+						return true;
+						
+					}else {
+						
+						return false;
+						
+					}
+					
+				} ).collect(Collectors.toList()); 
+				
+				return getParticularDoctorMessage;
+				
+			}else {
+				
+				throw new DoctorException("Patient not found");
+			}
+			
+		}else {
+			
+			throw new PatientException("Doctor not found");
+		}
 	}
 
 }

@@ -205,6 +205,42 @@ public class DoctorController {
 		
 	}
 	
+	
+	@GetMapping("/listOfPatient")
+	@CrossOrigin
+	public ResponseEntity<List<Patient>> getAllListOfPatient(@RequestParam String key) throws DoctorException, LoginException, PatientException{
+		
+		if(doctorLoginService.checkUserLoginOrNot(key)) { 
+			
+			CurrentSession currentUserSession = doctorService.getCurrentUserByUuid(key);
+			
+			Doctor registerDoctor = doctorService.getDoctorByUuid(key);
+			
+			if(!currentUserSession.getUserType().equals("doctor")) { 
+				
+				throw new LoginException("Please login as doctor"); 
+				
+			}
+			
+			if(registerDoctor != null) {
+				
+				List<Patient> listOfPatient = doctorService.getListOfPatient();
+				
+				return new ResponseEntity<List<Patient>>(listOfPatient, HttpStatus.OK);
+				
+			}else {
+				
+				throw new DoctorException("Please enter valid doctor details");
+				
+			}
+		
+		}else {
+			
+			throw new LoginException("Please enter valid key"); 
+			
+		}
+	}
+	
 
 }
 
