@@ -264,145 +264,150 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		Optional<Patient> patient = patientDao.findById(currentPatientSession.getUserId());
 		
 		
-		
-		if(patient.isPresent()) {
+		synchronized (this) {
 			
-			// setting patient in appointment
-			appointment.setPatient(patient.get());
+			if(patient.isPresent()) {
+				
+				// setting patient in appointment
+				appointment.setPatient(patient.get());
 
-			Doctor doctor = appointment.getDoctor();
+				Doctor doctor = appointment.getDoctor();
 
-			Optional<Doctor> registerDoctors = doctorDao.findById(doctor.getDoctorId()); 
+				Optional<Doctor> registerDoctors = doctorDao.findById(doctor.getDoctorId()); 
 
-			if(!registerDoctors.isEmpty()) {
-				
-				// setting doctor in appointment
-				appointment.setDoctor(registerDoctors.get());
-				
-				// check if appointment date and time is available or not
-				// this line generating time dynamically from doctors choice of work.
-				
-				getAppointmentDates(registerDoctors.get().getAppointmentFromTime(),registerDoctors.get().getAppointmentToTime());
-				
-				List<Appointment> listOfAppointment = appointment.getDoctor().getListOfAppointments();
-				
-				Boolean flag1 = false;
-				
-				Boolean flag2 = false;
-				
-				for(Appointment eachAppointment: listOfAppointment) {
+				if(!registerDoctors.isEmpty()) {
 					
+					// setting doctor in appointment
+					appointment.setDoctor(registerDoctors.get());
 					
+					// check if appointment date and time is available or not
+					// this line generating time dynamically from doctors choice of work.
 					
-					if(eachAppointment.getAppointmentDateAndTime().isEqual(appointment.getAppointmentDateAndTime())) {
+					getAppointmentDates(registerDoctors.get().getAppointmentFromTime(),registerDoctors.get().getAppointmentToTime());
+					
+					List<Appointment> listOfAppointment = appointment.getDoctor().getListOfAppointments();
+					
+					Boolean flag1 = false;
+					
+					Boolean flag2 = false;
+					
+					for(Appointment eachAppointment: listOfAppointment) {
 						
-						flag1 = true;
+						
+						
+						if(eachAppointment.getAppointmentDateAndTime().isEqual(appointment.getAppointmentDateAndTime())) {
+							
+							flag1 = true;
+							
+						}
+					}
+					
+					// check if given date and time if correct or not
+					
+					for(String str : myTimeDate.keySet()) {
+						
+						if(myTimeDate.get(str).isEqual(appointment.getAppointmentDateAndTime())) {
+							
+							flag2 = true;
+							
+						}
+					}
+					
+					
+					
+					Appointment registerAppointment = null;
+					
+					
+					
+					if(!flag1 && flag2) {
+						
+						
+						
+						registerAppointment = appointmentDao.save(appointment); 
+						
+						////////////////////////////////
+						
+						emailBody.setEmailBody("Dear Sir/Ma'am, \n You have booked an appointment with " + registerAppointment.getDoctor().getName() +
+								". Please make sure to join on time. If you want to call a doctor please contact " + registerAppointment.getDoctor().getMobileNo()+"\n"
+								
+								+"\n"
+								+"Appointment Id: " + registerAppointment.getAppointmentId()+"\n"
+								+"Doctor specialty: " + registerAppointment.getDoctor().getSpecialty()+"\n"
+								+"Doctor education: " + registerAppointment.getDoctor().getEducation()+"\n"
+								+"Doctor experience: " + registerAppointment.getDoctor().getExperience() +"\n"
+								+"\n"
+								
+								+"Thanks and Regards \n"
+								+"Appointment Booking Application");
+						
+						emailBody.setEmailSubject("You have successfully book appointment at " + registerAppointment.getAppointmentDateAndTime());
+						
+						PatientServiceImpl patientServiceImpl = new PatientServiceImpl(appointment, emailSenderService, emailBody);
+						
+						Thread emailSentThread = new Thread(patientServiceImpl);
+						
+						
+						
+						/////////////////////////
+						
+						// Multi-Threading
+						
+						emailSentThread.start();
+		
+						
+						///////////////////////////////
+						
+						
+						
+						
+						
+					}else {
+						
+						throw new AppointmentException("This time or date already booked or please enter valid appointment time and date " + appointment.getAppointmentDateAndTime());
 						
 					}
-				}
-				
-				// check if given date and time if correct or not
-				
-				for(String str : myTimeDate.keySet()) {
 					
-					if(myTimeDate.get(str).isEqual(appointment.getAppointmentDateAndTime())) {
-						
-						flag2 = true;
-						
-					}
-				}
-				
-				
-				
-				Appointment registerAppointment = null;
-				
-				
-				
-				if(!flag1 && flag2) {
+					
+					// we can't map appointment object directly because we don't have appointment id in it we have to mapped after saving the 
+					// appointment and then we will get the appointment id then it will not generate appointment again. If we mapped the register
+					// appointment.
+					
+					// mapping appointment in doctor and then saving doctor
 					
 					
 					
-					registerAppointment = appointmentDao.save(appointment); 
+					registerDoctors.get().getListOfAppointments().add(registerAppointment);
 					
-					////////////////////////////////
+					doctorDao.save(registerDoctors.get());
 					
-					emailBody.setEmailBody("Dear Sir/Ma'am, \n You have booked an appointment with " + registerAppointment.getDoctor().getName() +
-							". Please make sure to join on time. If you want to call a doctor please contact " + registerAppointment.getDoctor().getMobileNo()+"\n"
-							
-							+"\n"
-							+"Appointment Id: " + registerAppointment.getAppointmentId()+"\n"
-							+"Doctor specialty: " + registerAppointment.getDoctor().getSpecialty()+"\n"
-							+"Doctor education: " + registerAppointment.getDoctor().getEducation()+"\n"
-							+"Doctor experience: " + registerAppointment.getDoctor().getExperience() +"\n"
-							+"\n"
-							
-							+"Thanks and Regards \n"
-							+"Appointment Booking Application");
+					// mapping appointment in patient then saving patient
 					
-					emailBody.setEmailSubject("You have successfully book appointment at " + registerAppointment.getAppointmentDateAndTime());
+					patient.get().getListOfAppointments().add(registerAppointment);
 					
-					PatientServiceImpl patientServiceImpl = new PatientServiceImpl(appointment, emailSenderService, emailBody);
-					
-					Thread emailSentThread = new Thread(patientServiceImpl);
+					patientDao.save(patient.get());
 					
 					
 					
-					/////////////////////////
-					
-					// Multi-Threading
-					
-					emailSentThread.start();
-	
-					
-					///////////////////////////////
-					
-					
-					
+					return registerAppointment;
 					
 					
 				}else {
-					
-					throw new AppointmentException("This time or date already booked or please enter valid appointment time and date " + appointment.getAppointmentDateAndTime());
+					 
+					throw new DoctorException("Please enter valid doctors details or doctor not present with thid id " + doctor.getDoctorId());
 					
 				}
 				
 				
-				// we can't map appointment object directly because we don't have appointment id in it we have to mapped after saving the 
-				// appointment and then we will get the appointment id then it will not generate appointment again. If we mapped the register
-				// appointment.
-				
-				// mapping appointment in doctor and then saving doctor
-				
-				
-				
-				registerDoctors.get().getListOfAppointments().add(registerAppointment);
-				
-				doctorDao.save(registerDoctors.get());
-				
-				// mapping appointment in patient then saving patient
-				
-				patient.get().getListOfAppointments().add(registerAppointment);
-				
-				patientDao.save(patient.get());
-				
-				
-				
-				return registerAppointment;
-				
 				
 			}else {
-				 
-				throw new DoctorException("Please enter valid doctors details or doctor not present with thid id " + doctor.getDoctorId());
+				
+				throw new LoginException("Please enter valid key"); 
 				
 			}
 			
-			
-			
-		}else {
-			
-			throw new LoginException("Please enter valid key"); 
-			
 		}
+		
+		
 	}
 
 	@Override

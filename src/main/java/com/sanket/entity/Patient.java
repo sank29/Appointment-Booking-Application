@@ -71,23 +71,3 @@ public class Patient {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

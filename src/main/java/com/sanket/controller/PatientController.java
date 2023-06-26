@@ -246,6 +246,7 @@ public class PatientController {
 	@PostMapping("/getReview")
 	@CrossOrigin
 	public ResponseEntity<Review> getSpecificReviewOfDoctorByPatient(@RequestParam String key, @RequestBody Review review) throws LoginException, AppointmentException, DoctorException, ReviewException, PatientException{
+		
 		if(loginService.checkUserLoginOrNot(key)) {
 			
 			Review returnReiew = patientService.getReviewOfDoctorByPatient(key, review);  
