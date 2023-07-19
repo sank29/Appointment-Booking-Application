@@ -171,7 +171,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		
 		// empty the myTimeDate firstly before putting the new values
 		
-		System.out.println();
 		
 		myTimeDate.clear();
 		
@@ -292,8 +291,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 					Boolean flag2 = false;
 					
 					for(Appointment eachAppointment: listOfAppointment) {
-						
-						
 						
 						if(eachAppointment.getAppointmentDateAndTime().isEqual(appointment.getAppointmentDateAndTime())) {
 							
@@ -936,7 +933,6 @@ public class PatientServiceImpl implements PatientService, Runnable {
 		
 		for(Review eachReview: listOfReview) {
 			
-			System.out.println(eachReview.getReviewId() + " " + review.getReviewId());
 			
 			int result = eachReview.getReviewId().compareTo(review.getReviewId());
 			

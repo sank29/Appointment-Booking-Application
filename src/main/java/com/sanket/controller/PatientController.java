@@ -266,7 +266,6 @@ public class PatientController {
 	@CrossOrigin
 	public ResponseEntity<Review> updateReview(@RequestParam String key, @RequestBody Review review) throws LoginException, ReviewException, PatientException, DoctorException, AppointmentException{
 		
-		System.out.println(review);
 		if(loginService.checkUserLoginOrNot(key)) { 
 			
 			Review returnReiew = patientService.updateReview(key, review);  
@@ -307,9 +306,7 @@ public class PatientController {
 		if(loginService.checkUserLoginOrNot(key)) {
 			
 			if(forgetPassword.getNewPassword().equals(forgetPassword.getConfirmNewPassword())) {
-				
-				System.out.println(forgetPassword.getNewPassword().equals(forgetPassword.getConfirmNewPassword()));
-				
+								
 				if(forgetPassword.getOldPassword().equals(forgetPassword.getNewPassword())) {
 					
 					throw new PasswordException("Please enter new password.");

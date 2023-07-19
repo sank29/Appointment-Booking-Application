@@ -46,8 +46,6 @@ public class AdminController {
 			
 			CurrentSession currentUserSession = patientService.getCurrentUserByUuid(key);
 			
-			System.out.println(currentUserSession);
-			
 			if(!currentUserSession.getUserType().equals("admin")) { 
 				
 				throw new LoginException("Please login as admin");
