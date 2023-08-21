@@ -1,4 +1,4 @@
-# Appointment-Booking-Application.
+# Appointment-Booking-Application
 
 A rest api using Spring Boot that enables users to search and book appointments with doctors. Users can view a doctor's profile, including their education, experience, and patient reviews. The application also provide a calendar of available appointments, allowing users to select a time that works for them.
 
