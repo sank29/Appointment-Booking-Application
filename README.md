@@ -8,7 +8,7 @@ A rest api using Spring Boot that enables users to search and book appointments 
 ![Badge](https://visitor-counter-badge.vercel.app/api/suranjanachary/glad-creator-1065)
 
 ## Tech Stack
-- Java
+- Java.
 - Spring Framework
 - Spring Boot
 - Spring Data JPA
